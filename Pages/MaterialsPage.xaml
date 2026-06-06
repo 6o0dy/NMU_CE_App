@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             x:Class="NMU_CE_App.Pages.MaterialsPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BgMain}">
+
+    <Grid>
+        <GraphicsView x:Name="GridCanvas"
+                      InputTransparent="True">
+            <GraphicsView.Drawable>
+                <controls:GridBackgroundDrawable />
+            </GraphicsView.Drawable>
+        </GraphicsView>
+
+        <Grid RowDefinitions="Auto, *">
+            <Grid Grid.Row="0"
+                  BackgroundColor="{StaticResource HeaderBg}"
+                  Padding="20,0"
+                  ColumnDefinitions="Auto, *, Auto"
+                  HeightRequest="58">
+
+                <Border Grid.Column="0"
+                        BackgroundColor="#0DFFFFFF"
+                        Stroke="#1FFFFFFF"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="4"
+                        WidthRequest="34" HeightRequest="34"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="←"
+                           FontSize="18"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+
+                <Label x:Name="PageTitle"
+                       Grid.Column="1"
+                       Text="Subjects"
+                       TextColor="White"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       FontFamily="Cairo"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+
+                <HorizontalStackLayout Grid.Column="2" Spacing="8">
+                    <Border BackgroundColor="#0D00F2FF"
+                            Stroke="#3300F2FF"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="4"
+                            WidthRequest="34" HeightRequest="34"
+                            VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnInfoTapped" />
+                        </Border.GestureRecognizers>
+                        <Label Text="ⓘ"
+                               FontSize="14"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                    <Border BackgroundColor="#0D00F2FF"
+                            Stroke="#3300F2FF"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="4"
+                            WidthRequest="34" HeightRequest="34"
+                            VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnFullscreenTapped" />
+                        </Border.GestureRecognizers>
+                        <Label Text="⛶"
+                               FontSize="14"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <ScrollView x:Name="SubjectsScrollView" Grid.Row="1" Padding="20,10">
+                <Grid HorizontalOptions="Center">
+                    <VerticalStackLayout x:Name="ContentRoot"
+                                         MaximumWidthRequest="1280"
+                                         Spacing="16">
+                        <Label Text="Select a subject to view its materials"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}"
+                               FontFamily="Cairo"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,10,0,10" />
+                        <FlexLayout x:Name="SubjectsGrid"
+                                    Wrap="Wrap"
+                                    JustifyContent="Center"
+                                    AlignItems="Start"
+                                    AlignContent="Start" />
+                        <BoxView HeightRequest="40" Color="Transparent" />
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="NMU_CE_App.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:NMU_CE_App.Pages"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="False"
+       Shell.TabBarIsVisible="False">
+
+    <ShellContent Route="splash"
+                  ContentTemplate="{DataTemplate pages:SplashPage}" />
+
+    <ShellContent Route="home"
+                  ContentTemplate="{DataTemplate pages:HomePage}" />
+
+    <ShellContent Route="materials"
+                  ContentTemplate="{DataTemplate pages:MaterialsPage}" />
+
+    <ShellContent Route="quizlist"
+                  ContentTemplate="{DataTemplate pages:QuizListPage}" />
+
+    <ShellContent Route="quizweb"
+                  ContentTemplate="{DataTemplate pages:QuizWebViewPage}" />
+
+</Shell>

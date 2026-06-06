@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             x:Class="NMU_CE_App.Pages.SplashPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BgMain}">
+
+    <AbsoluteLayout>
+        <GraphicsView x:Name="GridCanvas"
+                      AbsoluteLayout.LayoutBounds="0,0,1,1"
+                      AbsoluteLayout.LayoutFlags="All"
+                      InputTransparent="True">
+            <GraphicsView.Drawable>
+                <controls:GridBackgroundDrawable />
+            </GraphicsView.Drawable>
+        </GraphicsView>
+
+        <Grid AbsoluteLayout.LayoutBounds="0,0,1,1"
+              AbsoluteLayout.LayoutFlags="All"
+              RowDefinitions="50, *, 35">
+
+            <Grid Grid.Row="0"
+                  BackgroundColor="{StaticResource HeaderBg}"
+                  Padding="25,0"
+                  ColumnDefinitions="*, Auto">
+                <Label Grid.Column="0"
+                       Text="NMU‑CE &amp; AIE"
+                       TextColor="{StaticResource Primary}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       FontFamily="Cairo"
+                       VerticalTextAlignment="Center" />
+
+                <HorizontalStackLayout Grid.Column="1"
+                                       VerticalOptions="Center"
+                                       Spacing="0">
+                    <Border BackgroundColor="#0D00F2FF"
+                            Stroke="#3300F2FF"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="6"
+                            HeightRequest="30"
+                            WidthRequest="30"
+                            VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnFullscreenTapped" />
+                        </Border.GestureRecognizers>
+                        <Label x:Name="FullscreenIcon"
+                               Text="⛶"
+                               FontSize="14"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <ScrollView Grid.Row="1"
+                        Padding="25,20">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="NMU‑CE &amp; AIE"
+                           Style="{StaticResource Headline}"
+                           Margin="0,40,0,10" />
+                    <Label Text="Preparing your workspace..."
+                           Style="{StaticResource SubHeadline}" />
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Border Grid.Row="2"
+                    BackgroundColor="#FA050B14"
+                    StrokeThickness="0"
+                    Padding="0">
+                <Label x:Name="FooterLabel"
+                       Text="Powered By ABDELRHMAN ELSAYED © 2026"
+                       Style="{StaticResource FooterText}" />
+            </Border>
+        </Grid>
+
+        <Grid x:Name="LoadingOverlay"
+              IsVisible="False"
+              AbsoluteLayout.LayoutBounds="0,0,1,1"
+              AbsoluteLayout.LayoutFlags="All"
+              BackgroundColor="{StaticResource BgMain}"
+              ZIndex="100">
+            <VerticalStackLayout VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="15">
+                <Label Text="جاري فحص البيانات..."
+                       Style="{StaticResource CheckText}" />
+                <Border BackgroundColor="#0DFFFFFF"
+                        StrokeThickness="0"
+                        HeightRequest="2"
+                        WidthRequest="250"
+                        HorizontalOptions="Center" />
+                <BoxView x:Name="GlowLine"
+                         Color="{StaticResource Primary}"
+                         HeightRequest="2"
+                         WidthRequest="0"
+                         HorizontalOptions="Center"
+                         CornerRadius="1" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <Grid x:Name="SetupOverlay"
+              IsVisible="False"
+              AbsoluteLayout.LayoutBounds="0,0,1,1"
+              AbsoluteLayout.LayoutFlags="All"
+              BackgroundColor="#FA050B14"
+              ZIndex="200">
+            <Border BackgroundColor="{StaticResource BgCard}"
+                    Stroke="{StaticResource Primary}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 20"
+                    Padding="30"
+                    WidthRequest="440"
+                    MaximumWidthRequest="440"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                <VerticalStackLayout Spacing="22">
+                    <Label Text="THE INFORMATION"
+                           Style="{StaticResource ModalTitle}" />
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Your Name"
+                               Style="{StaticResource FieldLabel}" />
+                        <Border BackgroundColor="{StaticResource InputBg}"
+                                Stroke="#334155"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="13,0">
+                            <Entry x:Name="NameEntry"
+                                   Placeholder="Enter Your Name Here..."
+                                   PlaceholderColor="{StaticResource TextSecondary}"
+                                   TextColor="White"
+                                   FontFamily="Cairo"
+                                   FontSize="15"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Academic Level"
+                               Style="{StaticResource FieldLabel}" />
+                        <Border BackgroundColor="{StaticResource InputBg}"
+                                Stroke="#334155"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="13,0">
+                            <Picker x:Name="YearPicker"
+                                    TextColor="White"
+                                    FontFamily="Cairo"
+                                    FontSize="15"
+                                    BackgroundColor="Transparent"
+                                    Title="Select Level">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Level 1</x:String>
+                                        <x:String>Level 2</x:String>
+                                        <x:String>Level 3</x:String>
+                                        <x:String>Level 4</x:String>
+                                        <x:String>Level 5</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Select The Semester"
+                               Style="{StaticResource FieldLabel}" />
+                        <HorizontalStackLayout Spacing="12"
+                                               HorizontalOptions="Center">
+                            <Border x:Name="Term1Tile"
+                                    Stroke="#334155" StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 12" Padding="14"
+                                    BackgroundColor="{StaticResource InputBg}"
+                                    WidthRequest="140">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnTerm1Tapped" />
+                                </Border.GestureRecognizers>
+                                <Label x:Name="Term1Label"
+                                       Text="Semester 1"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       FontFamily="Cairo" FontSize="15"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+                            </Border>
+
+                            <Border x:Name="Term2Tile"
+                                    Stroke="#334155" StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 12" Padding="14"
+                                    BackgroundColor="{StaticResource InputBg}"
+                                    WidthRequest="140">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnTerm2Tapped" />
+                                </Border.GestureRecognizers>
+                                <Label x:Name="Term2Label"
+                                       Text="Semester 2"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       FontFamily="Cairo" FontSize="15"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+                            </Border>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <Border BackgroundColor="{StaticResource Primary}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="0" HeightRequest="50"
+                            Margin="0,15,0,0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSaveTapped" />
+                        </Border.GestureRecognizers>
+                        <Label Text="Save Data"
+                               TextColor="#050B14"
+                               FontFamily="Cairo" FontSize="16"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </AbsoluteLayout>
+
+</ContentPage>

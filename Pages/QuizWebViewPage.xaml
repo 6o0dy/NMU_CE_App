@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NMU_CE_App.Pages.QuizWebViewPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#050b14">
+
+    <Grid RowDefinitions="*, Auto">
+        <WebView x:Name="QuizWebView"
+                 Grid.Row="0"
+                 VerticalOptions="Fill"
+                 HorizontalOptions="Fill"
+                 BackgroundColor="#050b14" />
+
+        <!-- Loading overlay -->
+        <Grid x:Name="LoadingOverlay"
+              Grid.RowSpan="2"
+              BackgroundColor="#FA050B14"
+              IsVisible="True">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="15">
+                <ActivityIndicator IsRunning="True"
+                                    Color="#00F2FF"
+                                    WidthRequest="40" HeightRequest="40" />
+                <Label x:Name="LoadingLabel"
+                       Text="Loading Quiz..."
+                       FontSize="16"
+                       FontFamily="Cairo"
+                       TextColor="#00F2FF"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             x:Class="NMU_CE_App.Pages.YouTubeChannelVideosPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BgMain}">
+
+    <Grid>
+        <GraphicsView x:Name="GridCanvas"
+                      InputTransparent="True">
+            <GraphicsView.Drawable>
+                <controls:GridBackgroundDrawable />
+            </GraphicsView.Drawable>
+        </GraphicsView>
+
+        <Grid RowDefinitions="Auto, *">
+            <Grid Grid.Row="0"
+                  BackgroundColor="{StaticResource HeaderBg}"
+                  Padding="20,0"
+                  ColumnDefinitions="Auto, *, Auto"
+                  HeightRequest="58">
+                <Border Grid.Column="0"
+                        BackgroundColor="#0DFFFFFF"
+                        Stroke="#1FFFFFFF"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="4"
+                        WidthRequest="34" HeightRequest="34"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="←"
+                           FontSize="18"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+
+                <Label x:Name="PageTitle"
+                       Grid.Column="1"
+                       Text="Loading..."
+                       TextColor="White"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       FontFamily="Cairo"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"
+                       LineBreakMode="TailTruncation"
+                       MaxLines="1" />
+
+                <HorizontalStackLayout Grid.Column="2" Spacing="8">
+                    <Border BackgroundColor="#0D00F2FF"
+                            Stroke="#3300F2FF"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="4"
+                            WidthRequest="34" HeightRequest="34"
+                            VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnInfoTapped" />
+                        </Border.GestureRecognizers>
+                        <Label Text="ⓘ"
+                               FontSize="14"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <Grid Grid.Row="1"
+                  RowDefinitions="Auto, *">
+
+                <Border Grid.Row="0"
+                        BackgroundColor="{StaticResource InputBg}"
+                        Stroke="#334155"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="0"
+                        Margin="8,10,8,5"
+                        HeightRequest="40">
+                    <Entry x:Name="SearchEntry"
+                           Placeholder="Search videos..."
+                           PlaceholderColor="{StaticResource TextSecondary}"
+                           TextColor="White"
+                           FontFamily="Cairo"
+                           FontSize="14"
+                           BackgroundColor="Transparent"
+                           HorizontalTextAlignment="Center"
+                           TextChanged="OnSearchTextChanged" />
+                </Border>
+
+                <ScrollView Grid.Row="1" Padding="0">
+                    <VerticalStackLayout x:Name="FilesList"
+                                         HorizontalOptions="Fill"
+                                         Spacing="14" />
+                </ScrollView>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             x:Class="NMU_CE_App.Pages.QuizListPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BgMain}">
+
+    <Grid>
+        <GraphicsView x:Name="GridCanvas" InputTransparent="True">
+            <GraphicsView.Drawable>
+                <controls:GridBackgroundDrawable />
+            </GraphicsView.Drawable>
+        </GraphicsView>
+
+        <Grid RowDefinitions="Auto, *">
+            <Grid Grid.Row="0"
+                  BackgroundColor="{StaticResource HeaderBg}"
+                  Padding="20,0"
+                  ColumnDefinitions="Auto, *, Auto"
+                  HeightRequest="58">
+
+                <Border Grid.Column="0"
+                        BackgroundColor="#0DFFFFFF"
+                        Stroke="#1FFFFFFF"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="4"
+                        WidthRequest="34" HeightRequest="34"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="←"
+                           FontSize="18"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+
+                <Label Grid.Column="1"
+                       Text="University Quiz Pro"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       FontFamily="Cairo"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Grid>
+
+            <ScrollView Grid.Row="1" Padding="20,10">
+                <VerticalStackLayout Spacing="15">
+                    <Label x:Name="StatusLabel"
+                           Text="Loading quizzes..."
+                           TextColor="{StaticResource TextSecondary}"
+                           FontSize="16"
+                           FontFamily="Cairo"
+                           HorizontalTextAlignment="Center"
+                           Margin="0,30,0,0" />
+
+                    <FlexLayout x:Name="SubjectsGrid"
+                                Wrap="Wrap"
+                                JustifyContent="Center"
+                                AlignItems="Start"
+                                AlignContent="Start"
+                                IsVisible="False" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>
