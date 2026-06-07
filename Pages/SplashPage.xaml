@@ -1,117 +1,255 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
              x:Class="NMU_CE_App.Pages.SplashPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#050B14">
+             BackgroundColor="{StaticResource BgMain}">
 
-    <Grid RowDefinitions="Auto, *" Padding="25">
-        <Label Grid.Row="0" Text="NMU-CE &amp; AIE"
-               TextColor="#00F2FF" FontSize="20"
-               FontAttributes="Bold" FontFamily="Cairo"
-               Margin="0,50,0,0" />
+    <Grid RowDefinitions="Auto, *">
+        <GraphicsView x:Name="GridCanvas"
+                      InputTransparent="True"
+                      Grid.RowSpan="2">
+            <GraphicsView.Drawable>
+                <controls:GridBackgroundDrawable />
+            </GraphicsView.Drawable>
+        </GraphicsView>
 
-        <VerticalStackLayout Grid.Row="1" VerticalOptions="Center" Spacing="20">
-            <Label Text="NMU-CE &amp; AIE"
-                   TextColor="White" FontSize="28"
-                   FontAttributes="Bold" FontFamily="Cairo"
-                   HorizontalTextAlignment="Center" />
+        <controls:AITitleBar x:Name="AppTitleBar"
+                             Grid.Row="0"
+                             Title="NMU-CE &amp; AIE"
+                             ShowBack="False" />
 
-            <Label Text="Preparing your workspace..."
-                   TextColor="#94A3B8" FontSize="16"
-                   FontFamily="Cairo" HorizontalTextAlignment="Center" />
+        <ScrollView Grid.Row="1"
+                    Padding="20,20">
+            <VerticalStackLayout x:Name="ContentRoot"
+                                 MaximumWidthRequest="440"
+                                 HorizontalOptions="Center"
+                                 Spacing="0">
 
-            <Grid x:Name="SetupOverlay" IsVisible="False">
-                <Border BackgroundColor="#1A0F172A" Stroke="#00F2FF"
-                        StrokeThickness="1" StrokeShape="RoundRectangle 20"
-                        Padding="30" WidthRequest="440"
-                        HorizontalOptions="Center" VerticalOptions="Center">
-                    <VerticalStackLayout Spacing="22">
-                        <Label Text="THE INFORMATION" TextColor="#00F2FF"
-                               FontSize="20" FontAttributes="Bold"
-                               FontFamily="Cairo" HorizontalTextAlignment="Center" />
+                <!-- Hero Section -->
+                <VerticalStackLayout x:Name="HeroSection"
+                                     Spacing="12"
+                                     Margin="0,60,0,0"
+                                     HorizontalOptions="Center">
+                    <Border BackgroundColor="#1A7C3AED"
+                            Stroke="#337C3AED"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 36"
+                            WidthRequest="72" HeightRequest="72"
+                            HorizontalOptions="Center">
+                        <Border.Shadow>
+                            <Shadow Brush="#557C3AED" Offset="0,0" Radius="24" Opacity="0.6" />
+                        </Border.Shadow>
+                        <Label Text="🧠"
+                               FontSize="32"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
 
-                        <VerticalStackLayout Spacing="10">
-                            <Label Text="Your Name" TextColor="#94A3B8"
-                                   FontSize="13" FontFamily="Cairo" />
-                            <Border BackgroundColor="#0D0F172A" Stroke="#334155"
-                                    StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="13,0">
-                                <Entry x:Name="NameEntry" Placeholder="Enter Your Name Here..."
-                                       PlaceholderColor="#64748B" TextColor="White"
-                                       FontFamily="Cairo" FontSize="15"
-                                       BackgroundColor="Transparent" />
-                            </Border>
-                        </VerticalStackLayout>
+                    <Label x:Name="MainTitle"
+                           Text="NMU-CE &amp; AIE"
+                           FontSize="30"
+                           TextColor="{StaticResource AICyan}"
+                           FontAttributes="Bold"
+                           FontFamily="Cairo"
+                           HorizontalTextAlignment="Center" />
 
-                        <VerticalStackLayout Spacing="10">
-                            <Label Text="Academic Level" TextColor="#94A3B8"
-                                   FontSize="13" FontFamily="Cairo" />
-                            <Border BackgroundColor="#0D0F172A" Stroke="#334155"
-                                    StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="13,0">
-                                <Picker x:Name="YearPicker" TextColor="White"
-                                        FontFamily="Cairo" FontSize="15"
-                                        BackgroundColor="Transparent" Title="Select Level">
-                                    <Picker.ItemsSource>
-                                        <x:Array Type="{x:Type x:String}">
-                                            <x:String>Level 1</x:String>
-                                            <x:String>Level 2</x:String>
-                                            <x:String>Level 3</x:String>
-                                            <x:String>Level 4</x:String>
-                                            <x:String>Level 5</x:String>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
-                            </Border>
-                        </VerticalStackLayout>
+                    <Label Text="AI-POWERED ENGINEERING PLATFORM"
+                           FontSize="13"
+                           TextColor="{StaticResource TextMuted}"
+                           FontFamily="Cairo"
+                           HorizontalTextAlignment="Center" />
 
-                        <VerticalStackLayout Spacing="10">
-                            <Label Text="Select The Semester" TextColor="#94A3B8"
-                                   FontSize="13" FontFamily="Cairo" />
-                            <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
-                                <Border x:Name="Term1Tile" Stroke="#334155"
-                                        StrokeThickness="1" StrokeShape="RoundRectangle 12"
-                                        Padding="14" BackgroundColor="#0D0F172A" WidthRequest="140">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnTerm1Tapped" />
-                                    </Border.GestureRecognizers>
-                                    <Label x:Name="Term1Label" Text="Semester 1"
-                                           TextColor="#94A3B8" FontFamily="Cairo"
-                                           FontSize="15" FontAttributes="Bold"
-                                           HorizontalTextAlignment="Center" />
-                                </Border>
-                                <Border x:Name="Term2Tile" Stroke="#334155"
-                                        StrokeThickness="1" StrokeShape="RoundRectangle 12"
-                                        Padding="14" BackgroundColor="#0D0F172A" WidthRequest="140">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnTerm2Tapped" />
-                                    </Border.GestureRecognizers>
-                                    <Label x:Name="Term2Label" Text="Semester 2"
-                                           TextColor="#94A3B8" FontFamily="Cairo"
-                                           FontSize="15" FontAttributes="Bold"
-                                           HorizontalTextAlignment="Center" />
-                                </Border>
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
+                    <BoxView HeightRequest="1"
+                             Color="{StaticResource AIPrimary}"
+                             Opacity="0.3"
+                             Margin="40,8,40,0" />
+                </VerticalStackLayout>
 
-                        <Border BackgroundColor="#00F2FF" StrokeThickness="0"
-                                StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="50"
-                                Margin="0,15,0,0">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnSaveTapped" />
-                            </Border.GestureRecognizers>
-                            <Label Text="Save Data" TextColor="#050B14"
-                                   FontFamily="Cairo" FontSize="16" FontAttributes="Bold"
-                                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                <!-- Setup Form -->
+                <VerticalStackLayout x:Name="SetupForm"
+                                     Spacing="20"
+                                     Margin="0,32,0,0">
+
+                    <Label Text="Let's Get Started"
+                           FontSize="22"
+                           TextColor="{StaticResource TextPrimary}"
+                           FontAttributes="Bold"
+                           FontFamily="Cairo"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="Enter your information to personalize your experience"
+                           FontSize="13"
+                           TextColor="{StaticResource TextSecondary}"
+                           FontFamily="Cairo"
+                           HorizontalTextAlignment="Center" />
+
+                    <!-- Name Field -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Your Name"
+                               TextColor="{StaticResource AICyan}"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               FontFamily="Cairo" />
+                        <Border BackgroundColor="{StaticResource InputBg}"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="14,0"
+                                HeightRequest="50">
+                            <Border.Shadow>
+                                <Shadow Brush="#0D7C3AED" Offset="0,0" Radius="8" Opacity="0.3" />
+                            </Border.Shadow>
+                            <Entry x:Name="NameEntry"
+                                   Placeholder="Enter your full name..."
+                                   PlaceholderColor="{StaticResource TextMuted}"
+                                   TextColor="{StaticResource TextPrimary}"
+                                   FontFamily="Cairo"
+                                   FontSize="15"
+                                   BackgroundColor="Transparent" />
                         </Border>
                     </VerticalStackLayout>
-                </Border>
-            </Grid>
-        </VerticalStackLayout>
 
-        <Label Grid.Row="2" x:Name="FooterLabel"
-               Text="Powered By ABDELRHMAN ELSAYED © 2026"
-               TextColor="#64748B" FontSize="12" FontFamily="Cairo"
-               HorizontalTextAlignment="Center" Margin="0,0,0,10" />
+                    <!-- Academic Level -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Academic Level"
+                               TextColor="{StaticResource AICyan}"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               FontFamily="Cairo" />
+                        <Border BackgroundColor="{StaticResource InputBg}"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="14,0"
+                                HeightRequest="50">
+                            <Picker x:Name="YearPicker"
+                                    TextColor="{StaticResource TextPrimary}"
+                                    TitleColor="{StaticResource TextMuted}"
+                                    FontFamily="Cairo"
+                                    FontSize="15"
+                                    BackgroundColor="Transparent"
+                                    Title="Choose your level">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Level 1</x:String>
+                                        <x:String>Level 2</x:String>
+                                        <x:String>Level 3</x:String>
+                                        <x:String>Level 4</x:String>
+                                        <x:String>Level 5</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Semester Selector -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Semester"
+                               TextColor="{StaticResource AICyan}"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               FontFamily="Cairo" />
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                            <Border x:Name="Term1Tile"
+                                    Stroke="{StaticResource BorderColor}"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 12"
+                                    Padding="16"
+                                    BackgroundColor="{StaticResource InputBg}"
+                                    HeightRequest="52">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnTerm1Tapped" />
+                                </Border.GestureRecognizers>
+                                <Label x:Name="Term1Label"
+                                       Text="Semester 1"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       FontFamily="Cairo"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    x:Name="Term2Tile"
+                                    Stroke="{StaticResource BorderColor}"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 12"
+                                    Padding="16"
+                                    BackgroundColor="{StaticResource InputBg}"
+                                    HeightRequest="52">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnTerm2Tapped" />
+                                </Border.GestureRecognizers>
+                                <Label x:Name="Term2Label"
+                                       Text="Semester 2"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       FontFamily="Cairo"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Save Button -->
+                    <Border x:Name="SaveBtn"
+                            BackgroundColor="{StaticResource AIPrimary}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 14"
+                            HeightRequest="52"
+                            Margin="0,8,0,0">
+                        <Border.Shadow>
+                            <Shadow Brush="#557C3AED" Offset="0,4" Radius="16" Opacity="0.5" />
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSaveTapped" />
+                        </Border.GestureRecognizers>
+                        <Label x:Name="SaveLabel"
+                               Text="🚀 Launch Platform"
+                               TextColor="White"
+                               FontFamily="Cairo"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Border>
+
+                </VerticalStackLayout>
+
+                <!-- Loading Indicator -->
+                <VerticalStackLayout x:Name="LoadingSection"
+                                     IsVisible="False"
+                                     Spacing="16"
+                                     Margin="0,40,0,0"
+                                     HorizontalOptions="Center">
+                    <ActivityIndicator IsRunning="True"
+                                       Color="{StaticResource AIPrimary}"
+                                       WidthRequest="40"
+                                       HeightRequest="40" />
+                    <Label x:Name="LoadingLabel"
+                           Text="Preparing your experience..."
+                           TextColor="{StaticResource TextSecondary}"
+                           FontFamily="Cairo"
+                           FontSize="14"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+
+                <!-- Spacer -->
+                <BoxView HeightRequest="40" Color="Transparent" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Footer -->
+        <Label x:Name="FooterLabel"
+               VerticalOptions="End"
+               HorizontalOptions="Center"
+               TextColor="{StaticResource TextMuted}"
+               FontSize="11"
+               FontFamily="Cairo"
+               Margin="0,0,0,12" />
     </Grid>
-
 </ContentPage>

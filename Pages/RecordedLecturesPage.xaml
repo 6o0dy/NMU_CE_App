@@ -6,88 +6,42 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="{StaticResource BgMain}">
 
-    <Grid>
+    <Grid RowDefinitions="Auto, *">
         <GraphicsView x:Name="GridCanvas"
-                      InputTransparent="True">
+                      InputTransparent="True"
+                      Grid.RowSpan="2">
             <GraphicsView.Drawable>
                 <controls:GridBackgroundDrawable />
             </GraphicsView.Drawable>
         </GraphicsView>
 
-        <Grid RowDefinitions="Auto, *">
-            <Grid Grid.Row="0"
-                  BackgroundColor="{StaticResource HeaderBg}"
-                  Padding="20,0"
-                  ColumnDefinitions="Auto, *, Auto"
-                  HeightRequest="58">
-                <Border Grid.Column="0"
-                        BackgroundColor="#0DFFFFFF"
-                        Stroke="#1FFFFFFF"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
-                        Padding="4"
-                        WidthRequest="34" HeightRequest="34"
-                        VerticalOptions="Center">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnBackTapped" />
-                    </Border.GestureRecognizers>
-                    <Label Text="←"
-                           FontSize="18"
-                           TextColor="{StaticResource Primary}"
+        <controls:AITitleBar x:Name="PageTitleBar"
+                             Grid.Row="0"
+                             Title="Recorded Lectures"
+                             ShowBack="True"
+                             BackClicked="OnTitleBarBack" />
+
+        <ScrollView x:Name="FoldersScrollView"
+                    Grid.Row="1"
+                    Padding="20,10">
+            <Grid HorizontalOptions="Center">
+                <VerticalStackLayout x:Name="ContentRoot"
+                                     MaximumWidthRequest="1280"
+                                     Spacing="16">
+                    <Label Text="Select a lecture group to view its media"
+                           FontSize="14"
+                           TextColor="{StaticResource TextSecondary}"
+                           FontFamily="Cairo"
                            HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center" />
-                </Border>
-
-                <Label x:Name="PageTitle"
-                       Grid.Column="1"
-                       Text="Recorded Lectures"
-                       TextColor="White"
-                       FontSize="20"
-                       FontAttributes="Bold"
-                       FontFamily="Cairo"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-
-                <HorizontalStackLayout Grid.Column="2" Spacing="8">
-                    <Border BackgroundColor="#0D00F2FF"
-                            Stroke="#3300F2FF"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 10"
-                            Padding="4"
-                            WidthRequest="34" HeightRequest="34"
-                            VerticalOptions="Center">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnInfoTapped" />
-                        </Border.GestureRecognizers>
-                        <Label Text="ⓘ"
-                               FontSize="14"
-                               TextColor="{StaticResource Primary}"
-                               HorizontalTextAlignment="Center"
-                               VerticalTextAlignment="Center" />
-                    </Border>
-                </HorizontalStackLayout>
+                           Margin="0,10,0,10" />
+                    <FlexLayout x:Name="FoldersGrid"
+                                Wrap="Wrap"
+                                JustifyContent="Center"
+                                AlignItems="Start"
+                                AlignContent="Start" />
+                    <BoxView HeightRequest="40" Color="Transparent" />
+                </VerticalStackLayout>
             </Grid>
-
-            <ScrollView x:Name="FoldersScrollView" Grid.Row="1" Padding="20,10">
-                <Grid HorizontalOptions="Center">
-                    <VerticalStackLayout x:Name="ContentRoot"
-                                         MaximumWidthRequest="1280"
-                                         Spacing="16">
-                        <Label Text="Select a lecture group to view its media"
-                               FontSize="14"
-                               TextColor="{StaticResource TextSecondary}"
-                               FontFamily="Cairo"
-                               HorizontalTextAlignment="Center"
-                               Margin="0,10,0,10" />
-                        <FlexLayout x:Name="FoldersGrid"
-                                    Wrap="Wrap"
-                                    JustifyContent="Center"
-                                    AlignItems="Start"
-                                    AlignContent="Start" />
-                        <BoxView HeightRequest="40" Color="Transparent" />
-                    </VerticalStackLayout>
-                </Grid>
-            </ScrollView>
-        </Grid>
+        </ScrollView>
     </Grid>
 </ContentPage>

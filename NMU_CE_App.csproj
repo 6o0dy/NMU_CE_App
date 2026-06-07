@@ -52,7 +52,7 @@
 
 	<!-- Android-specific settings (architectures + trimming) -->
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
-		<RuntimeIdentifiers>android-arm;android-arm64;android-x86</RuntimeIdentifiers>
+		<RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
 		<AndroidLinkMode Condition="'$(Configuration)' == 'Debug'">SdkOnly</AndroidLinkMode>
 		<AndroidLinkMode Condition="'$(Configuration)' == 'Release'">Full</AndroidLinkMode>
 		<PublishTrimmed Condition="'$(Configuration)' == 'Release'">true</PublishTrimmed>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NMU_CE_App.Controls.AITitleBar"
+             x:Name="Self"
+             IsVisible="True"
+             HeightRequest="36"
+             BackgroundColor="Transparent">
+    <Border HeightRequest="36"
+            BackgroundColor="#F00A0A1A"
+            Stroke="#287C3AED"
+            StrokeThickness="0">
+        <Border.Shadow>
+            <Shadow Brush="#407C3AED" Offset="0,2" Radius="8" Opacity="0.4" />
+        </Border.Shadow>
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="0" />
+        </Border.StrokeShape>
+        <Grid ColumnDefinitions="Auto, *, Auto"
+              HeightRequest="36"
+              Padding="0,0,0,0">
+            <!-- Left: back + app name -->
+            <HorizontalStackLayout Grid.Column="0"
+                                   Spacing="6"
+                                   VerticalOptions="Center"
+                                   Margin="12,0,0,0">
+                <Border x:Name="BtnBack"
+                        IsVisible="False"
+                        BackgroundColor="#1AFFFFFF"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 4"
+                        WidthRequest="28" HeightRequest="26"
+                        Padding="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE72B;"
+                           FontFamily="Segoe MDL2 Assets"
+                           FontSize="12"
+                           TextColor="{StaticResource AIPrimary}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+                <BoxView WidthRequest="1"
+                         HeightRequest="18"
+                         Color="#287C3AED"
+                         VerticalOptions="Center"
+                         Margin="4,0" />
+                <Border BackgroundColor="#187C3AED"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 4"
+                        Padding="6,2">
+                    <Label Text="NMU-CE"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AICyan}"
+                           VerticalTextAlignment="Center" />
+                </Border>
+                <Border BackgroundColor="#1800E5FF"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 4"
+                        Padding="6,2">
+                    <Label Text="AIE"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AIGreen}"
+                           VerticalTextAlignment="Center" />
+                </Border>
+            </HorizontalStackLayout>
+
+            <!-- Center: page title -->
+            <Label x:Name="TitleLabel"
+                   Grid.Column="1"
+                   TextColor="{StaticResource AICyan}"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   FontFamily="Cairo"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   LineBreakMode="TailTruncation"
+                   MaxLines="1">
+                <Label.Shadow>
+                    <Shadow Brush="#3000E5FF"
+                            Offset="0,0"
+                            Radius="6"
+                            Opacity="0.6" />
+                </Label.Shadow>
+            </Label>
+
+            <!-- Right: + drag, Fullscreen, Min, Max, Close -->
+            <HorizontalStackLayout Grid.Column="2"
+                                   Spacing="0"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,0,0">
+                <Border x:Name="BtnDragHandle"
+                        WidthRequest="36" HeightRequest="36"
+                        BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        Padding="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDragTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE8FB;"
+                           FontFamily="Segoe MDL2 Assets"
+                           FontSize="12"
+                           TextColor="{StaticResource TextMuted}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+                           Opacity="0.7" />
+                </Border>
+                <Border x:Name="BtnFullscreen"
+                        WidthRequest="46" HeightRequest="36"
+                        BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        Padding="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFullscreenTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE740;"
+                           FontFamily="Segoe MDL2 Assets"
+                           FontSize="10"
+                           TextColor="{StaticResource TextSecondary}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+                <Border x:Name="BtnMinimize"
+                        IsVisible="False"
+                        WidthRequest="46" HeightRequest="36"
+                        BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        Padding="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMinimizeTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE921;"
+                           FontFamily="Segoe MDL2 Assets"
+                           FontSize="10"
+                           TextColor="{StaticResource TextSecondary}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+                <Border x:Name="BtnMaximize"
+                        IsVisible="False"
+                        WidthRequest="46" HeightRequest="36"
+                        BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        Padding="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMaximizeTapped" />
+                    </Border.GestureRecognizers>
+                    <Grid WidthRequest="46" HeightRequest="36">
+                        <Label x:Name="MaxRestoreIcon"
+                               Text="&#xE739;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="10"
+                               TextColor="{StaticResource TextSecondary}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               IsVisible="False" />
+                        <Label x:Name="MaxMaxIcon"
+                               Text="&#xE922;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="10"
+                               TextColor="{StaticResource TextSecondary}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+                    </Grid>
+                </Border>
+                <Border x:Name="BtnClose"
+                        IsVisible="False"
+                        WidthRequest="46" HeightRequest="36"
+                        BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        Padding="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCloseTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE8BB;"
+                           FontFamily="Segoe MDL2 Assets"
+                           FontSize="10"
+                           TextColor="{StaticResource TextSecondary}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+            </HorizontalStackLayout>
+        </Grid>
+    </Border>
+</ContentView>

@@ -20,14 +20,13 @@ public partial class App : Application
     {
         try
         {
-            // Pre-cache CDN resources in background
             try { _ = CdnCacheService.PreCacheAllAsync(); }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[App] PreCache: {ex.Message}"); }
 
             var window = new Window(new AppShell());
 
 #if WINDOWS
-            window.Created += (s, e) =>
+            window.HandlerChanged += (s, e) =>
             {
                 try
                 {
@@ -44,6 +43,14 @@ public partial class App : Application
                         titleBar.ButtonBackgroundColor = Microsoft.UI.Colors.Transparent;
                         titleBar.InactiveBackgroundColor = Microsoft.UI.Colors.Transparent;
                         titleBar.ButtonInactiveBackgroundColor = Microsoft.UI.Colors.Transparent;
+
+                        appWindow.Changed += (_, args) =>
+                        {
+                            if (args.DidPresenterChange)
+                            {
+                                TitleBarService.RefreshFullscreenState();
+                            }
+                        };
                     }
                 }
                 catch { }

@@ -6,66 +6,36 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="{StaticResource BgMain}">
 
-    <Grid>
-        <GraphicsView x:Name="GridCanvas" InputTransparent="True">
+    <Grid RowDefinitions="Auto, *">
+        <GraphicsView x:Name="GridCanvas" InputTransparent="True" Grid.RowSpan="2">
             <GraphicsView.Drawable>
                 <controls:GridBackgroundDrawable />
             </GraphicsView.Drawable>
         </GraphicsView>
 
-        <Grid RowDefinitions="Auto, *">
-            <Grid Grid.Row="0"
-                  BackgroundColor="{StaticResource HeaderBg}"
-                  Padding="20,0"
-                  ColumnDefinitions="Auto, *, Auto"
-                  HeightRequest="58">
+        <controls:AITitleBar x:Name="PageTitleBar"
+                             Grid.Row="0"
+                             Title="University Quiz Pro"
+                             ShowBack="True"
+                             BackClicked="OnTitleBarBack" />
 
-                <Border Grid.Column="0"
-                        BackgroundColor="#0DFFFFFF"
-                        Stroke="#1FFFFFFF"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
-                        Padding="4"
-                        WidthRequest="34" HeightRequest="34"
-                        VerticalOptions="Center">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnBackTapped" />
-                    </Border.GestureRecognizers>
-                    <Label Text="←"
-                           FontSize="18"
-                           TextColor="{StaticResource Primary}"
-                           HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center" />
-                </Border>
-
-                <Label Grid.Column="1"
-                       Text="University Quiz Pro"
-                       FontSize="20"
-                       FontAttributes="Bold"
+        <ScrollView Grid.Row="1" Padding="20,10">
+            <VerticalStackLayout Spacing="15">
+                <Label x:Name="StatusLabel"
+                       Text="Loading quizzes..."
+                       TextColor="{StaticResource TextSecondary}"
+                       FontSize="16"
                        FontFamily="Cairo"
-                       TextColor="White"
                        HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-            </Grid>
+                       Margin="0,30,0,0" />
 
-            <ScrollView Grid.Row="1" Padding="20,10">
-                <VerticalStackLayout Spacing="15">
-                    <Label x:Name="StatusLabel"
-                           Text="Loading quizzes..."
-                           TextColor="{StaticResource TextSecondary}"
-                           FontSize="16"
-                           FontFamily="Cairo"
-                           HorizontalTextAlignment="Center"
-                           Margin="0,30,0,0" />
-
-                    <FlexLayout x:Name="SubjectsGrid"
-                                Wrap="Wrap"
-                                JustifyContent="Center"
-                                AlignItems="Start"
-                                AlignContent="Start"
-                                IsVisible="False" />
-                </VerticalStackLayout>
-            </ScrollView>
-        </Grid>
+                <FlexLayout x:Name="SubjectsGrid"
+                            Wrap="Wrap"
+                            JustifyContent="Center"
+                            AlignItems="Start"
+                            AlignContent="Start"
+                            IsVisible="False" />
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 </ContentPage>

@@ -24,6 +24,11 @@ public partial class QuizWebViewPage : ContentPage
             await LoadHtml();
     }
 
+    private void OnTitleBarBack(object? sender, EventArgs e)
+    {
+        _ = Shell.Current.GoToAsync("//home");
+    }
+
     private async Task LoadHtml()
     {
         _loadCts?.Cancel();

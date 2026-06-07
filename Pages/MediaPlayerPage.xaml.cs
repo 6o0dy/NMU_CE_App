@@ -467,6 +467,11 @@ input[type=range]{{width:55px;height:3px;accent-color:var(--cyan);background:tra
         await Shell.Current.GoToAsync("..");
     }
 
+    private void OnTitleBarBack(object? sender, EventArgs e)
+    {
+        _ = HandleBack();
+    }
+
     private static string GetPosKey(string url)
     {
         return $"vidpos_{Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(url)))[..16]}";

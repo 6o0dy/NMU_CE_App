@@ -3,34 +3,63 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <Color x:Key="BgMain">#050B14</Color>
-    <Color x:Key="BgCard">#1E293B</Color>
-    <Color x:Key="Primary">#00F2FF</Color>
-    <Color x:Key="Accent">#BD00FF</Color>
-    <Color x:Key="Danger">#FF4757</Color>
+    <!-- AI Dark Theme - Core Backgrounds -->
+    <Color x:Key="BgMain">#0A0A1A</Color>
+    <Color x:Key="BgCard">#1A1A2E</Color>
+    <Color x:Key="BgSurface">#16213E</Color>
+    <Color x:Key="HeaderBg">#4D0A0A1A</Color>
+    <Color x:Key="ModalOverlay">#FA0A0A1A</Color>
+    <Color x:Key="InputBg">#0F172A</Color>
+
+    <!-- AI Brand Colors -->
+    <Color x:Key="AIPrimary">#7C3AED</Color>
+    <Color x:Key="AIPrimaryDark">#5B21B6</Color>
+    <Color x:Key="AICyan">#00E5FF</Color>
+    <Color x:Key="AICyanDark">#00B8D4</Color>
+    <Color x:Key="AIGreen">#06D6A0</Color>
+    <Color x:Key="AIGreenDark">#059669</Color>
+
+    <!-- Unified Text Colors -->
     <Color x:Key="TextPrimary">#E2E8F0</Color>
     <Color x:Key="TextSecondary">#94A3B8</Color>
+    <Color x:Key="TextMuted">#64748B</Color>
+
+    <!-- Functional Colors -->
+    <Color x:Key="Danger">#FF4757</Color>
     <Color x:Key="StarColor">#FFB800</Color>
-    <Color x:Key="GridColor">#0D00F2FF</Color>
     <Color x:Key="BorderColor">#334155</Color>
-    <Color x:Key="InputBg">#0F172A</Color>
-    <Color x:Key="HeaderBg">#4D050B14</Color>
-    <Color x:Key="ModalOverlay">#FA050B14</Color>
     <Color x:Key="TimerColor">#FF9F43</Color>
 
-    <Color x:Key="PrimaryDark">#00C4CC</Color>
+    <!-- Neural Accent Colors -->
+    <Color x:Key="NeuralPink">#FF00AA</Color>
+    <Color x:Key="NeuralRed">#FF0055</Color>
+    <Color x:Key="NeuralPurple">#BD00FF</Color>
+    <Color x:Key="NeuralOrange">#FF6600</Color>
+    <Color x:Key="NeuralYellow">#FFDD00</Color>
+
+    <!-- Glow Semi-Transparent -->
+    <Color x:Key="GlowPurple">#0D7C3AED</Color>
+    <Color x:Key="GlowCyan">#0D00E5FF</Color>
+    <Color x:Key="GlowGreen">#0D06D6A0</Color>
+    <Color x:Key="GlowRed">#0DFF0055</Color>
+    <Color x:Key="GlowOrange">#0DFF6600</Color>
+
+    <!-- ===== Backward Compatible Aliases (old → new) ===== -->
+    <Color x:Key="Primary">#7C3AED</Color>
+    <Color x:Key="PrimaryDark">#5B21B6</Color>
+    <Color x:Key="Accent">#BD00FF</Color>
     <Color x:Key="NeonRed">#FF0055</Color>
-    <Color x:Key="NeonGreen">#00FF88</Color>
+    <Color x:Key="NeonGreen">#06D6A0</Color>
     <Color x:Key="NeonPurple">#BD00FF</Color>
     <Color x:Key="NeonOrange">#FF6600</Color>
     <Color x:Key="NeonPink">#FF00AA</Color>
     <Color x:Key="NeonYellow">#FFDD00</Color>
-    <Color x:Key="GlowCyan">#0D00F2FF</Color>
-    <Color x:Key="GlowRed">#0DFF0055</Color>
-    <Color x:Key="GlowGreen">#0D00FF88</Color>
-    <Color x:Key="GlowPurple">#0DBD00FF</Color>
+    <Color x:Key="GridColor">#0D7C3AED</Color>
 
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource AIPrimary}"/>
+    <SolidColorBrush x:Key="CyanBrush" Color="{StaticResource AICyan}"/>
+    <SolidColorBrush x:Key="GreenBrush" Color="{StaticResource AIGreen}"/>
     <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}"/>
     <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}"/>
     <SolidColorBrush x:Key="BgMainBrush" Color="{StaticResource BgMain}"/>

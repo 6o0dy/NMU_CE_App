@@ -7,6 +7,7 @@ public partial class SplashPage : ContentPage
 {
     private readonly SessionService _session = new();
     private string? _selectedTerm;
+    private bool _hasAnimated;
 
     public SplashPage()
     {
@@ -28,6 +29,12 @@ public partial class SplashPage : ContentPage
         }
     }
 
+    protected override void OnSizeAllocated(double width, double height)
+    {
+        base.OnSizeAllocated(width, height);
+        GridCanvas?.Invalidate();
+    }
+
     private void UpdateFooter()
     {
         FooterLabel.Text = SessionService.GetFooterCredit();
@@ -37,21 +44,82 @@ public partial class SplashPage : ContentPage
     {
         if (!_session.HasData)
         {
-            await Task.Delay(200);
-            await ShowSetupModal();
+            SetupForm.IsVisible = true;
+            SetupForm.Opacity = 0;
+            await Task.Delay(150);
+            await AnimateEntrance();
         }
         else
         {
-            await Task.Delay(300);
+            LoadingSection.IsVisible = true;
+            SetupForm.IsVisible = false;
+            LoadingLabel.Text = "Welcome back! Loading your workspace...";
+            await Task.Delay(400);
             await GoToHome();
         }
     }
 
-    private async Task ShowSetupModal()
+    private async Task AnimateEntrance()
     {
-        SetupOverlay.IsVisible = true;
-        SetupOverlay.Opacity = 0;
-        await SetupOverlay.FadeToAsync(1, 200);
+        var heroElements = new View[] { MainTitle, Term1Tile, Term2Tile, SaveBtn };
+        foreach (var el in heroElements)
+            el.Opacity = 0;
+
+        await Task.WhenAll(
+            HeroSection.FadeToAsync(1, 600, Easing.CubicOut),
+            HeroSection.TranslateTo(0, 0, 500, Easing.CubicOut)
+        );
+
+        var formElements = new (View element, int delay)[]
+        {
+            (SetupForm, 100),
+        };
+
+        foreach (var (element, delay) in formElements)
+        {
+            element.Opacity = 0;
+            element.TranslationY = 30;
+        }
+
+        for (int i = 0; i < formElements.Length; i++)
+        {
+            var (element, delay) = formElements[i];
+            await Task.Delay(delay);
+            await Task.WhenAll(
+                element.FadeToAsync(1, 400, Easing.CubicOut),
+                element.TranslateTo(0, 0, 400, Easing.CubicOut)
+            );
+        }
+
+        var staggerItems = new (View element, int delay)[]
+        {
+            (NameEntry.Parent is Border nameBorder ? nameBorder.Parent as VerticalStackLayout ?? SetupForm : SetupForm, 80),
+        };
+
+        var children = new View[]
+        {
+            MainTitle, Term1Tile, Term2Tile, SaveBtn
+        };
+
+        foreach (var child in children)
+        {
+            if (child == MainTitle) continue;
+            child.Opacity = 0;
+            child.TranslationY = 20;
+        }
+
+        for (int i = 0; i < children.Length; i++)
+        {
+            var child = children[i];
+            if (child == MainTitle) continue;
+            await Task.Delay(80);
+            await Task.WhenAll(
+                child.FadeToAsync(1, 350, Easing.CubicOut),
+                child.TranslateTo(0, 0, 350, Easing.CubicOut)
+            );
+        }
+
+        _hasAnimated = true;
     }
 
     private async Task GoToHome()
@@ -62,9 +130,9 @@ public partial class SplashPage : ContentPage
     private void OnTerm1Tapped(object? sender, TappedEventArgs e)
     {
         _selectedTerm = "Semester 1";
-        Term1Tile.Stroke = Color.FromArgb("#00F2FF");
-        Term1Tile.BackgroundColor = Color.FromArgb("#2600F2FF");
-        Term1Label.TextColor = Color.FromArgb("#00F2FF");
+        Term1Tile.Stroke = Color.FromArgb("#7C3AED");
+        Term1Tile.BackgroundColor = Color.FromArgb("#267C3AED");
+        Term1Label.TextColor = Color.FromArgb("#7C3AED");
 
         Term2Tile.Stroke = Color.FromArgb("#334155");
         Term2Tile.BackgroundColor = Color.FromArgb("#0F172A");
@@ -74,9 +142,9 @@ public partial class SplashPage : ContentPage
     private void OnTerm2Tapped(object? sender, TappedEventArgs e)
     {
         _selectedTerm = "Semester 2";
-        Term2Tile.Stroke = Color.FromArgb("#00F2FF");
-        Term2Tile.BackgroundColor = Color.FromArgb("#2600F2FF");
-        Term2Label.TextColor = Color.FromArgb("#00F2FF");
+        Term2Tile.Stroke = Color.FromArgb("#7C3AED");
+        Term2Tile.BackgroundColor = Color.FromArgb("#267C3AED");
+        Term2Label.TextColor = Color.FromArgb("#7C3AED");
 
         Term1Tile.Stroke = Color.FromArgb("#334155");
         Term1Tile.BackgroundColor = Color.FromArgb("#0F172A");
@@ -109,14 +177,15 @@ public partial class SplashPage : ContentPage
 
         _session.SaveStudentProfile(profile);
 
-        // Pre-cache quiz data for the selected level/term in background
         var level = year.Replace(" ", "_");
         var term = _selectedTerm.Replace(" ", "_");
         _ = CdnCacheService.PreCacheQuizDataAsync(level, term);
 
-        await SetupOverlay.FadeToAsync(0, 200);
-        SetupOverlay.IsVisible = false;
+        SaveLabel.Text = "✓ Starting...";
+        SaveBtn.BackgroundColor = Color.FromArgb("#06D6A0");
+        SaveBtn.IsEnabled = false;
 
+        await Task.Delay(300);
         await GoToHome();
     }
 }

@@ -81,8 +81,8 @@ public partial class YouTubePlayerPage : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
-    private async void OnBackTapped(object? sender, TappedEventArgs e)
+    private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        await HandleBack();
+        _ = Shell.Current.GoToAsync("..");
     }
 }

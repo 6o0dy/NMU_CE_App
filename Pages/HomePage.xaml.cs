@@ -65,11 +65,11 @@ public partial class HomePage : ContentPage
 
     private void AttachHoverEffects()
     {
-        AddHover(CardMaterials, Color.FromArgb("#0A1E293B"), Color.FromArgb("#1A1E293B"));
-        AddHover(CardYoutube, Color.FromArgb("#152A1B1B"), Color.FromArgb("#1A1E293B"));
-        AddHover(CardRecorded, Color.FromArgb("#151E1B2A"), Color.FromArgb("#1A1E293B"));
-        AddHover(CardTests, Color.FromArgb("#152A2015"), Color.FromArgb("#1A1E293B"));
-        AddHover(CardLab, Color.FromArgb("#15152A1E"), Color.FromArgb("#1A1E293B"));
+        AddHover(CardMaterials, Color.FromArgb("#0A7C3AED"), Color.FromArgb("#1A1A2E"));
+        AddHover(CardYoutube, Color.FromArgb("#152A1B1B"), Color.FromArgb("#1A1A2E"));
+        AddHover(CardRecorded, Color.FromArgb("#151E1B2A"), Color.FromArgb("#1A1A2E"));
+        AddHover(CardTests, Color.FromArgb("#152A2015"), Color.FromArgb("#1A1A2E"));
+        AddHover(CardLab, Color.FromArgb("#15152A1E"), Color.FromArgb("#1A1A2E"));
     }
 
     private static void AddHover(Border card, Color hoverBg, Color originalBg)
@@ -195,13 +195,8 @@ public partial class HomePage : ContentPage
     private async void OnInfoTapped(object? sender, TappedEventArgs e)
     {
         await DisplayAlertAsync("NMU-CE & AIE",
-            "Version 2.0\nDeveloped by ABDELRHMAN ELSAYED\nYour ultimate platform for Engineering students.",
+            "Version 2.0\nDeveloped by ABDELRHMAN ELSAYED\nYour AI-Powered Engineering Platform.",
             "OK");
-    }
-
-    private void OnFullscreenTapped(object? sender, TappedEventArgs e)
-    {
-        ToggleFullscreen();
     }
 
     private async void OnFabTapped(object? sender, TappedEventArgs e)
@@ -352,9 +347,9 @@ public partial class HomePage : ContentPage
     private void SelectEditTerm1()
     {
         _editTerm = "Semester 1";
-        EditTerm1.Stroke = Color.FromArgb("#00F2FF");
-        EditTerm1.BackgroundColor = Color.FromArgb("#2600F2FF");
-        EditTerm1Label.TextColor = Color.FromArgb("#00F2FF");
+        EditTerm1.Stroke = Color.FromArgb("#7C3AED");
+        EditTerm1.BackgroundColor = Color.FromArgb("#267C3AED");
+        EditTerm1Label.TextColor = Color.FromArgb("#7C3AED");
 
         EditTerm2.Stroke = Color.FromArgb("#334155");
         EditTerm2.BackgroundColor = Color.FromArgb("#0F172A");
@@ -364,9 +359,9 @@ public partial class HomePage : ContentPage
     private void SelectEditTerm2()
     {
         _editTerm = "Semester 2";
-        EditTerm2.Stroke = Color.FromArgb("#00F2FF");
-        EditTerm2.BackgroundColor = Color.FromArgb("#2600F2FF");
-        EditTerm2Label.TextColor = Color.FromArgb("#00F2FF");
+        EditTerm2.Stroke = Color.FromArgb("#7C3AED");
+        EditTerm2.BackgroundColor = Color.FromArgb("#267C3AED");
+        EditTerm2Label.TextColor = Color.FromArgb("#7C3AED");
 
         EditTerm1.Stroke = Color.FromArgb("#334155");
         EditTerm1.BackgroundColor = Color.FromArgb("#0F172A");
@@ -396,7 +391,7 @@ public partial class HomePage : ContentPage
             EditYear.IsEnabled = true;
 
             btn.Text = "Save Changes";
-            EditSaveBtn.BackgroundColor = Color.FromArgb("#00FF88");
+            EditSaveBtn.BackgroundColor = Color.FromArgb("#06D6A0");
         }
         else
         {
@@ -437,7 +432,7 @@ public partial class HomePage : ContentPage
         EditYear.IsEnabled = false;
 
         EditSaveLabel.Text = "Change";
-        EditSaveBtn.BackgroundColor = Color.FromArgb("#00F2FF");
+        EditSaveBtn.BackgroundColor = Color.FromArgb("#7C3AED");
     }
 
     private async void OnDeleteTapped(object? sender, TappedEventArgs e)
@@ -451,27 +446,5 @@ public partial class HomePage : ContentPage
             await DisplayAlertAsync("Deleted", "Your data has been removed.", "OK");
             await Shell.Current.GoToAsync("//splash");
         }
-    }
-
-    private void ToggleFullscreen()
-    {
-#if WINDOWS
-        try
-        {
-            var mauiWindow = App.Current?.Windows[0];
-            if (mauiWindow?.Handler?.PlatformView is Microsoft.UI.Xaml.Window nativeWindow)
-            {
-                var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-                var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
-                var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
-
-                if (appWindow.Presenter.Kind == Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen)
-                    appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.Default);
-                else
-                    appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen);
-            }
-        }
-        catch { }
-#endif
     }
 }

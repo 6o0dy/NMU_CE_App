@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
              x:Class="NMU_CE_App.Pages.MediaPlayerPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#000000"
-             NavigationPage.HasNavigationBar="False">
+             BackgroundColor="#000000">
 
-    <Grid>
-        <Grid RowDefinitions="Auto, *"
-              Padding="0,0">
+    <Grid RowDefinitions="Auto, *">
+        <controls:AITitleBar x:Name="PageTitleBar"
+                             Grid.Row="0"
+                             Title="{Binding Source={x:Reference PageTitle}, Path=Text}"
+                             ShowBack="True"
+                             BackClicked="OnTitleBarBack" />
 
-            <Label x:Name="PageTitle"
-                   Grid.Row="0"
-                   Text=""
-                   TextColor="White"
-                   FontSize="1"
-                   IsVisible="False" />
+        <Label x:Name="PageTitle" Text="Media Player" IsVisible="False" />
 
-            <WebView x:Name="PlayerWebView"
-                     Grid.Row="1"
-                     BackgroundColor="#000000"
-                     HorizontalOptions="Fill"
-                     VerticalOptions="Fill" />
-        </Grid>
+        <WebView x:Name="PlayerWebView"
+                 Grid.Row="1"
+                 BackgroundColor="#000000"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill" />
     </Grid>
 </ContentPage>

@@ -3,10 +3,11 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <!-- ===== TYPOGRAPHY ===== -->
+
     <Style TargetType="Label" x:Key="Headline">
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
         <Setter Property="FontSize" Value="24" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Cairo" />
         <Setter Property="FontAttributes" Value="Bold" />
     </Style>
@@ -14,24 +15,29 @@
     <Style TargetType="Label" x:Key="SubHeadline">
         <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Cairo" />
     </Style>
 
-    <Style TargetType="Label" x:Key="CheckText">
-        <Setter Property="TextColor" Value="{StaticResource Primary}" />
-        <Setter Property="FontSize" Value="20" />
+    <Style TargetType="Label" x:Key="PageTitle">
+        <Setter Property="TextColor" Value="{StaticResource AICyan}" />
+        <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="Cairo" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style TargetType="Label" x:Key="ModalTitle">
-        <Setter Property="TextColor" Value="{StaticResource Primary}" />
-        <Setter Property="FontSize" Value="22" />
+    <Style TargetType="Label" x:Key="CardTitle">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontSize" Value="15" />
         <Setter Property="FontFamily" Value="Cairo" />
         <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="CardSubtitle">
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontFamily" Value="Cairo" />
     </Style>
 
     <Style TargetType="Label" x:Key="FieldLabel">
@@ -41,18 +47,50 @@
     </Style>
 
     <Style TargetType="Label" x:Key="FooterText">
-        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
-        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="FontFamily" Value="Cairo" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style TargetType="Label" x:Key="HeaderTitle">
-        <Setter Property="FontSize" Value="20" />
+    <Style TargetType="Label" x:Key="HeroTitle">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontSize" Value="28" />
         <Setter Property="FontFamily" Value="Cairo" />
         <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <!-- ===== CARDS ===== -->
+
+    <Style TargetType="Border" x:Key="NeuralCard">
+        <Setter Property="BackgroundColor" Value="{StaticResource BgCard}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="NeuralCardSmall">
+        <Setter Property="BackgroundColor" Value="{StaticResource BgCard}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+    </Style>
+
+    <!-- ===== BUTTONS ===== -->
+
+    <Style TargetType="Border" x:Key="PrimaryButton">
+        <Setter Property="BackgroundColor" Value="{StaticResource AIPrimary}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="HeightRequest" Value="46" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="GhostButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="Stroke" Value="{StaticResource AIPrimary}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="HeightRequest" Value="46" />
     </Style>
 
 </ResourceDictionary>

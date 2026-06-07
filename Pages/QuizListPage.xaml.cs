@@ -103,8 +103,8 @@ public partial class QuizListPage : ContentPage
         await Shell.Current.GoToAsync("//quizweb");
     }
 
-    private async void OnBackTapped(object? sender, TappedEventArgs e)
+    private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//home");
+        _ = Shell.Current.GoToAsync("//home");
     }
 }

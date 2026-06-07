@@ -406,9 +406,9 @@ public partial class YouTubeChannelVideosPage : ContentPage
         return ("Level_1", "Semester_1");
     }
 
-    private async void OnBackTapped(object? sender, TappedEventArgs e)
+    private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        _ = Shell.Current.GoToAsync("..");
     }
 
     private async void OnInfoTapped(object? sender, TappedEventArgs e)

@@ -15,61 +15,10 @@
         </GraphicsView>
 
         <Grid RowDefinitions="Auto, *">
-            <Grid Grid.Row="0"
-                  BackgroundColor="{StaticResource HeaderBg}"
-                  Padding="20,0"
-                  ColumnDefinitions="Auto, *, Auto"
-                  HeightRequest="58">
-
-                <Border Grid.Column="0"
-                        BackgroundColor="#0DFFFFFF"
-                        Stroke="#1FFFFFFF"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
-                        Padding="4"
-                        WidthRequest="34" HeightRequest="34"
-                        VerticalOptions="Center">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnBackTapped" />
-                    </Border.GestureRecognizers>
-                    <Label Text="←"
-                           FontSize="18"
-                           TextColor="{StaticResource Primary}"
-                           HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center" />
-                </Border>
-
-                <Label x:Name="PageTitle"
-                       Grid.Column="1"
-                       Text="Loading..."
-                       TextColor="White"
-                       FontSize="18"
-                       FontAttributes="Bold"
-                       FontFamily="Cairo"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center"
-                       LineBreakMode="TailTruncation"
-                       MaxLines="1" />
-
-                <HorizontalStackLayout Grid.Column="2" Spacing="8">
-                    <Border BackgroundColor="#0D00F2FF"
-                            Stroke="#3300F2FF"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 10"
-                            Padding="4"
-                            WidthRequest="34" HeightRequest="34"
-                            VerticalOptions="Center">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnInfoTapped" />
-                        </Border.GestureRecognizers>
-                        <Label Text="ⓘ"
-                               FontSize="14"
-                               TextColor="{StaticResource Primary}"
-                               HorizontalTextAlignment="Center"
-                               VerticalTextAlignment="Center" />
-                    </Border>
-                </HorizontalStackLayout>
-            </Grid>
+            <controls:AITitleBar x:Name="PageTitleBar"
+                                 Title="{Binding Source={x:Reference PageTitle}, Path=Text}"
+                                 ShowBack="True"
+                                 BackClicked="OnTitleBarBack" />
 
             <Grid Grid.Row="1"
                   RowDefinitions="Auto, *, Auto">
@@ -107,5 +56,8 @@
                                        Spacing="0" />
             </Grid>
         </Grid>
+
+        <!-- Hidden label for binding title -->
+        <Label x:Name="PageTitle" Text="Loading..." IsVisible="False" />
     </Grid>
 </ContentPage>

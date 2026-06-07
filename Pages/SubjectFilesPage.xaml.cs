@@ -581,9 +581,9 @@ public partial class SubjectFilesPage : ContentPage
         });
     }
 
-    private async void OnBackTapped(object? sender, TappedEventArgs e)
+    private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        _ = Shell.Current.GoToAsync("..");
     }
 
     private void OnSearchTextChanged(object? sender, TextChangedEventArgs e)
@@ -606,11 +606,5 @@ public partial class SubjectFilesPage : ContentPage
                 row.IsVisible = string.IsNullOrEmpty(query) || anyVisible;
             }
         }
-    }
-
-    private async void OnInfoTapped(object? sender, TappedEventArgs e)
-    {
-        await DisplayAlertAsync(_subjectName.Replace("_", " "),
-            "تصفح ملفات المادة الدراسية.\nيتم جلب البيانات من Archive.org.", "OK");
     }
 }

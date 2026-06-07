@@ -38,8 +38,6 @@ public partial class MaterialsPage : ContentPage
         }
     }
 
-    // ===== DATA LOADING =====
-
     private async Task LoadDataAsync()
     {
         ShowBusy("جاري تحميل المواد...");
@@ -130,7 +128,7 @@ public partial class MaterialsPage : ContentPage
             Margin = new Thickness(0, 40, 0, 0),
             Children =
             {
-                new ActivityIndicator { IsRunning = true, Color = Color.FromArgb("#00F2FF"), WidthRequest = 40, HeightRequest = 40 },
+                new ActivityIndicator { IsRunning = true, Color = Color.FromArgb("#7C3AED"), WidthRequest = 40, HeightRequest = 40 },
                 new Label { Text = msg, TextColor = Color.FromArgb("#94A3B8"), HorizontalTextAlignment = TextAlignment.Center, FontFamily = "Cairo", FontSize = 14 }
             }
         });
@@ -180,8 +178,6 @@ public partial class MaterialsPage : ContentPage
         }
         return ("Level_1", "Semester_1");
     }
-
-    // ===== SUBJECTS GRID =====
 
     private (double width, double height) GetCardSize()
     {
@@ -299,7 +295,7 @@ public partial class MaterialsPage : ContentPage
             return ("🧠", Color.FromArgb("#66BB6A"));
         if (n.Contains("prog") || n.Contains("code") || n.Contains("struct") || n.Contains("oop") || n.Contains("algorithm") || n.Contains("web") || n.Contains("soft") || n.Contains("os") || n.Contains("database"))
             return ("💻", Color.FromArgb("#66BB6A"));
-        return ("📖", Color.FromArgb("#00F2FF"));
+        return ("📖", Color.FromArgb("#7C3AED"));
     }
 
     private Border CreateSubjectCard(string subject, (string icon, Color color) style, double cardW, double cardH)
@@ -312,7 +308,7 @@ public partial class MaterialsPage : ContentPage
 
         var card = new Border
         {
-            BackgroundColor = Color.FromArgb("#1E293B"),
+            BackgroundColor = Color.FromArgb("#1A1A2E"),
             Stroke = borderColor,
             StrokeThickness = 1,
             StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 16 },
@@ -323,9 +319,8 @@ public partial class MaterialsPage : ContentPage
             Shadow = new Shadow { Brush = new SolidColorBrush(glowColor), Offset = new Point(0, 0), Radius = 16f, Opacity = 0.35f }
         };
 
-        var originalBg = Color.FromArgb("#1E293B");
+        var originalBg = Color.FromArgb("#1A1A2E");
         var hoverBg = Color.FromArgb("#243447");
-        var originalStroke = borderColor;
         var glowBrush = new SolidColorBrush(glowColor);
 
         var pointer = new PointerGestureRecognizer();
@@ -385,39 +380,8 @@ public partial class MaterialsPage : ContentPage
         return card;
     }
 
-    // ===== NAVIGATION =====
-
-    private async void OnBackTapped(object? sender, TappedEventArgs e)
+    private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//home");
-    }
-
-    private async void OnInfoTapped(object? sender, TappedEventArgs e)
-    {
-        await DisplayAlertAsync("Study Materials",
-            "تصفح المواد الدراسية لمستواك والترم الحالي.\nيتم جلب البيانات من Archive.org.", "OK");
-    }
-
-    private void OnFullscreenTapped(object? sender, TappedEventArgs e) => ToggleFullscreen();
-
-    private void ToggleFullscreen()
-    {
-#if WINDOWS
-        try
-        {
-            var mauiWindow = App.Current?.Windows[0];
-            if (mauiWindow?.Handler?.PlatformView is Microsoft.UI.Xaml.Window nativeWindow)
-            {
-                var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-                var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
-                var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
-                if (appWindow.Presenter.Kind == Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen)
-                    appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.Default);
-                else
-                    appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen);
-            }
-        }
-        catch { }
-#endif
+        _ = Shell.Current.GoToAsync("//home");
     }
 }

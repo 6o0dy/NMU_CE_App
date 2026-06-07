@@ -415,9 +415,9 @@ public partial class RecordedLecturesPage : ContentPage
         return card;
     }
 
-    private async void OnBackTapped(object? sender, TappedEventArgs e)
+    private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//home");
+        _ = Shell.Current.GoToAsync("//home");
     }
 
     private async void OnInfoTapped(object? sender, TappedEventArgs e)

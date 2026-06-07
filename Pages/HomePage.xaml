@@ -6,312 +6,262 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="{StaticResource BgMain}">
 
-    <Grid>
+    <Grid RowDefinitions="Auto, *">
         <GraphicsView x:Name="GridCanvas"
-                      InputTransparent="True">
+                      InputTransparent="True"
+                      Grid.RowSpan="2">
             <GraphicsView.Drawable>
                 <controls:GridBackgroundDrawable />
             </GraphicsView.Drawable>
         </GraphicsView>
 
-        <Grid RowDefinitions="Auto, *">
-            <Grid Grid.Row="0"
-                  BackgroundColor="{StaticResource HeaderBg}"
-                  Padding="20,0"
-                  ColumnDefinitions="Auto, *, Auto"
-                  HeightRequest="58">
+        <controls:AITitleBar x:Name="PageTitleBar"
+                             Grid.Row="0"
+                             Title="NMU-CE &amp; AIE"
+                             ShowBack="False" />
 
-                <Border Grid.Column="0"
-                        BackgroundColor="#0DFFFFFF"
-                        Stroke="#1FFFFFFF"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
-                        Padding="4"
-                        WidthRequest="34" HeightRequest="34"
-                        VerticalOptions="Center">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnInfoTapped" />
-                    </Border.GestureRecognizers>
-                    <Label Text="ⓘ"
-                           FontSize="16"
-                           TextColor="{StaticResource Primary}"
-                           HorizontalTextAlignment="Center"
+        <ScrollView x:Name="ContentScroller"
+                    Grid.Row="1"
+                    Padding="20,10">
+            <VerticalStackLayout x:Name="HomeContent"
+                                 MaximumWidthRequest="1280"
+                                 Spacing="0"
+                                 HorizontalOptions="Center">
+
+                <!-- Hero Section -->
+                <HorizontalStackLayout HorizontalOptions="Center"
+                                       Spacing="10"
+                                       Margin="0,28,0,0">
+                    <Label Text="🚀"
+                           FontSize="24"
                            VerticalTextAlignment="Center" />
-                </Border>
-
-                <HorizontalStackLayout Grid.Column="1"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center"
-                                       Spacing="0">
-                    <Label Text="NMU"
-                           TextColor="White"
-                           FontSize="20"
+                    <Label x:Name="UserNameLabel"
+                           Text="Future Engineer"
+                           FontSize="26"
+                           TextColor="{StaticResource AICyan}"
                            FontAttributes="Bold"
                            FontFamily="Cairo"
                            VerticalTextAlignment="Center" />
-                    <Label Text="-CE &amp; AIE"
-                           TextColor="{StaticResource Primary}"
-                           FontSize="20"
+                    <Label Text="مرحباً بك يا"
+                           FontSize="22"
+                           TextColor="White"
                            FontAttributes="Bold"
                            FontFamily="Cairo"
                            VerticalTextAlignment="Center" />
                 </HorizontalStackLayout>
 
-                <Border Grid.Column="2"
-                        BackgroundColor="#0D00F2FF"
-                        Stroke="#3300F2FF"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 10"
-                        Padding="4"
-                        WidthRequest="34" HeightRequest="34"
-                        VerticalOptions="Center">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnFullscreenTapped" />
-                    </Border.GestureRecognizers>
-                    <Label x:Name="FullscreenIcon"
-                           Text="⛶"
-                           FontSize="14"
-                           TextColor="{StaticResource Primary}"
-                           HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center" />
-                </Border>
-            </Grid>
+                <Label Text="&lt; Everything you need is here /&gt;"
+                       FontSize="14"
+                       TextColor="{StaticResource TextSecondary}"
+                       FontFamily="Cairo"
+                       HorizontalTextAlignment="Center"
+                       Margin="0,8,0,32" />
 
-            <ScrollView Grid.Row="1"
-                        x:Name="ContentScroller"
-                        Padding="20,10">
-                <Grid HorizontalOptions="Center">
-                    <VerticalStackLayout x:Name="HomeContent"
-                                         MaximumWidthRequest="1280"
-                                         Spacing="0">
+                <Grid x:Name="CardsGrid"
+                      ColumnDefinitions="*, *"
+                      RowDefinitions="Auto, Auto, Auto"
+                      ColumnSpacing="28"
+                      RowSpacing="28">
 
-                    <HorizontalStackLayout HorizontalOptions="Center"
-                                           Spacing="10"
-                                           Margin="0,28,0,0">
-                        <Label Text="🚀"
-                               FontSize="24"
-                               VerticalTextAlignment="Center" />
-                        <Label x:Name="UserNameLabel"
-                               Text="Future Engineer"
-                               FontSize="26"
-                               TextColor="{StaticResource Primary}"
-                               FontAttributes="Bold"
-                               FontFamily="Cairo"
-                               VerticalTextAlignment="Center" />
-                        <Label Text="مرحباً بك يا"
-                               FontSize="22"
-                               TextColor="White"
-                               FontAttributes="Bold"
-                               FontFamily="Cairo"
-                               VerticalTextAlignment="Center" />
-                    </HorizontalStackLayout>
+                    <!-- Materials Card -->
+                    <Border Grid.ColumnSpan="2"
+                            x:Name="CardMaterials"
+                            BackgroundColor="{StaticResource BgCard}"
+                            Stroke="{StaticResource AIPrimary}"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 22"
+                            Padding="28,24"
+                            Margin="4">
+                        <Border.Shadow>
+                            <Shadow x:Name="MatShadow" Brush="#557C3AED" Offset="0,0" Radius="28" Opacity="0.5" />
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="materials" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="22">
+                            <Border Grid.Column="0"
+                                    x:Name="MatIconContainer"
+                                    WidthRequest="62" HeightRequest="62"
+                                    BackgroundColor="#157C3AED"
+                                    Stroke="{StaticResource AIPrimary}"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 31"
+                                    VerticalOptions="Center">
+                                <Border.Shadow>
+                                    <Shadow Brush="#557C3AED" Offset="0,0" Radius="16" Opacity="0.5" />
+                                </Border.Shadow>
+                                <Label Text="🧠" FontSize="30" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="6">
+                                <Label Text="Study Materials"
+                                       TextColor="White"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       FontFamily="Cairo" />
+                                <Label Text="Structure Programming, Mechanics..."
+                                       TextColor="{StaticResource TextSecondary}"
+                                       FontSize="13"
+                                       FontFamily="Cairo" />
+                                <HorizontalStackLayout Spacing="6" Margin="0,2,0,0">
+                                    <Label Text="→" TextColor="{StaticResource AIPrimary}" FontSize="13" VerticalTextAlignment="Center" FontAttributes="Bold" />
+                                    <Label Text="Browse subjects" TextColor="{StaticResource AIPrimary}" FontSize="13" FontFamily="Cairo" VerticalTextAlignment="Center" FontAttributes="Bold" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
 
-                    <Label Text="&lt; Everything you need is here /&gt;"
-                           FontSize="14"
-                           TextColor="{StaticResource TextSecondary}"
-                           FontFamily="Cairo"
-                           HorizontalTextAlignment="Center"
-                           Margin="0,8,0,32" />
+                    <!-- YouTube Card -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            x:Name="CardYoutube"
+                            BackgroundColor="{StaticResource BgCard}"
+                            Stroke="{StaticResource NeuralRed}"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="16"
+                            Margin="4">
+                        <Border.Shadow>
+                            <Shadow x:Name="YtShadow" Brush="#33FF0055" Offset="0,0" Radius="24" Opacity="0.35" />
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="youtube" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                            <Border x:Name="YtIconContainer"
+                                    Grid.Column="0"
+                                    WidthRequest="46" HeightRequest="46"
+                                    BackgroundColor="#15FF0055"
+                                    Stroke="{StaticResource NeuralRed}"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 23"
+                                    VerticalOptions="Center">
+                                <Border.Shadow>
+                                    <Shadow Brush="#33FF0055" Offset="0,0" Radius="12" Opacity="0.5" />
+                                </Border.Shadow>
+                                <Label Text="🤖" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                <Label Text="YouTube" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
+                                <Label Text="Explanations From YouTube" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" LineBreakMode="TailTruncation" MaxLines="1" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
 
-                    <Grid x:Name="CardsGrid"
-                          ColumnDefinitions="*, *"
-                          RowDefinitions="Auto, Auto, Auto"
-                          ColumnSpacing="28"
-                          RowSpacing="28">
-                        <Border Grid.ColumnSpan="2"
-                                x:Name="CardMaterials"
-                                BackgroundColor="#1A1E293B"
-                                Stroke="{StaticResource Primary}"
-                                StrokeThickness="2"
-                                StrokeShape="RoundRectangle 22"
-                                Padding="28,24"
-                                Margin="4">
-                            <Border.Shadow>
-                                <Shadow x:Name="MatShadow" Brush="#5500F2FF" Offset="0,0" Radius="28" Opacity="0.5" />
-                            </Border.Shadow>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="materials" />
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="22">
-                                <Border Grid.Column="0"
-                                        x:Name="MatIconContainer"
-                                        WidthRequest="62" HeightRequest="62"
-                                        BackgroundColor="#1500F2FF"
-                                        Stroke="{StaticResource Primary}"
-                                        StrokeThickness="1.5"
-                                        StrokeShape="RoundRectangle 31"
-                                        VerticalOptions="Center">
-                                    <Border.Shadow>
-                                        <Shadow Brush="#5500F2FF" Offset="0,0" Radius="16" Opacity="0.5" />
-                                    </Border.Shadow>
-                                    <Label Text="🧠" FontSize="30" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="6">
-                                    <Label Text="Study Materials"
-                                           TextColor="White"
-                                           FontSize="20"
-                                           FontAttributes="Bold"
-                                           FontFamily="Cairo" />
-                                    <Label Text="Structure Programming, Mechanics..."
-                                           TextColor="{StaticResource TextSecondary}"
-                                           FontSize="13"
-                                           FontFamily="Cairo" />
-                                    <HorizontalStackLayout Spacing="6" Margin="0,2,0,0">
-                                        <Label Text="→" TextColor="{StaticResource Primary}" FontSize="13" VerticalTextAlignment="Center" FontAttributes="Bold" />
-                                        <Label Text="Browse subjects" TextColor="{StaticResource Primary}" FontSize="13" FontFamily="Cairo" VerticalTextAlignment="Center" FontAttributes="Bold" />
-                                    </HorizontalStackLayout>
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
+                    <!-- Recorded Card -->
+                    <Border Grid.Row="1" Grid.Column="1"
+                            x:Name="CardRecorded"
+                            BackgroundColor="{StaticResource BgCard}"
+                            Stroke="{StaticResource NeuralPurple}"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="16"
+                            Margin="4">
+                        <Border.Shadow>
+                            <Shadow x:Name="RecShadow" Brush="#33BD00FF" Offset="0,0" Radius="24" Opacity="0.35" />
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="recorded" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                            <Border x:Name="RecIconContainer"
+                                    Grid.Column="0"
+                                    WidthRequest="46" HeightRequest="46"
+                                    BackgroundColor="#15BD00FF"
+                                    Stroke="{StaticResource NeuralPurple}"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 23"
+                                    VerticalOptions="Center">
+                                <Border.Shadow>
+                                    <Shadow Brush="#33BD00FF" Offset="0,0" Radius="12" Opacity="0.5" />
+                                </Border.Shadow>
+                                <Label Text="💾" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                <Label Text="Recorded" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
+                                <Label Text="Videos &amp; Audio Recordings" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" LineBreakMode="TailTruncation" MaxLines="1" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
 
-                        <Border Grid.Row="1" Grid.Column="0"
-                                x:Name="CardYoutube"
-                                BackgroundColor="#1A1E293B"
-                                Stroke="{StaticResource NeonRed}"
-                                StrokeThickness="2"
-                                StrokeShape="RoundRectangle 20"
-                                Padding="16"
-                                Margin="4">
-                            <Border.Shadow>
-                                <Shadow x:Name="YtShadow" Brush="#33FF0055" Offset="0,0" Radius="24" Opacity="0.35" />
-                            </Border.Shadow>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="youtube" />
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
-                                <Border x:Name="YtIconContainer"
-                                        Grid.Column="0"
-                                        WidthRequest="46" HeightRequest="46"
-                                        BackgroundColor="#15FF0055"
-                                        Stroke="{StaticResource NeonRed}"
-                                        StrokeThickness="1.5"
-                                        StrokeShape="RoundRectangle 23"
-                                        VerticalOptions="Center">
-                                    <Border.Shadow>
-                                        <Shadow Brush="#33FF0055" Offset="0,0" Radius="12" Opacity="0.5" />
-                                    </Border.Shadow>
-                                    <Label Text="🤖" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
-                                    <Label Text="YouTube" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
-                                    <Label Text="Explanations From YouTube" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" LineBreakMode="TailTruncation" MaxLines="1" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
+                    <!-- Tests Card -->
+                    <Border Grid.Row="2" Grid.Column="0"
+                            x:Name="CardTests"
+                            BackgroundColor="{StaticResource BgCard}"
+                            Stroke="{StaticResource NeuralOrange}"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="16"
+                            Margin="4">
+                        <Border.Shadow>
+                            <Shadow x:Name="TestShadow" Brush="#33FF6600" Offset="0,0" Radius="24" Opacity="0.35" />
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="tests" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                            <Border x:Name="TestIconContainer"
+                                    Grid.Column="0"
+                                    WidthRequest="46" HeightRequest="46"
+                                    BackgroundColor="#15FF6600"
+                                    Stroke="{StaticResource NeuralOrange}"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 23"
+                                    VerticalOptions="Center">
+                                <Border.Shadow>
+                                    <Shadow Brush="#33FF6600" Offset="0,0" Radius="12" Opacity="0.5" />
+                                </Border.Shadow>
+                                <Label Text="📋" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                <Label Text="Tests" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
+                                <Label Text="Test Your Skills" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
 
-                        <Border Grid.Row="1" Grid.Column="1"
-                                x:Name="CardRecorded"
-                                BackgroundColor="#1A1E293B"
-                                Stroke="{StaticResource NeonPurple}"
-                                StrokeThickness="2"
-                                StrokeShape="RoundRectangle 20"
-                                Padding="16"
-                                Margin="4">
-                            <Border.Shadow>
-                                <Shadow x:Name="RecShadow" Brush="#33BD00FF" Offset="0,0" Radius="24" Opacity="0.35" />
-                            </Border.Shadow>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="recorded" />
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
-                                <Border x:Name="RecIconContainer"
-                                        Grid.Column="0"
-                                        WidthRequest="46" HeightRequest="46"
-                                        BackgroundColor="#15BD00FF"
-                                        Stroke="{StaticResource NeonPurple}"
-                                        StrokeThickness="1.5"
-                                        StrokeShape="RoundRectangle 23"
-                                        VerticalOptions="Center">
-                                    <Border.Shadow>
-                                        <Shadow Brush="#33BD00FF" Offset="0,0" Radius="12" Opacity="0.5" />
-                                    </Border.Shadow>
-                                    <Label Text="💾" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
-                                    <Label Text="Recorded" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
-                                    <Label Text="Videos &amp; Audio Recordings" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" LineBreakMode="TailTruncation" MaxLines="1" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-
-                        <Border Grid.Row="2" Grid.Column="0"
-                                x:Name="CardTests"
-                                BackgroundColor="#1A1E293B"
-                                Stroke="{StaticResource NeonOrange}"
-                                StrokeThickness="2"
-                                StrokeShape="RoundRectangle 20"
-                                Padding="16"
-                                Margin="4">
-                            <Border.Shadow>
-                                <Shadow x:Name="TestShadow" Brush="#33FF6600" Offset="0,0" Radius="24" Opacity="0.35" />
-                            </Border.Shadow>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="tests" />
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
-                                <Border x:Name="TestIconContainer"
-                                        Grid.Column="0"
-                                        WidthRequest="46" HeightRequest="46"
-                                        BackgroundColor="#15FF6600"
-                                        Stroke="{StaticResource NeonOrange}"
-                                        StrokeThickness="1.5"
-                                        StrokeShape="RoundRectangle 23"
-                                        VerticalOptions="Center">
-                                    <Border.Shadow>
-                                        <Shadow Brush="#33FF6600" Offset="0,0" Radius="12" Opacity="0.5" />
-                                    </Border.Shadow>
-                                    <Label Text="📋" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
-                                    <Label Text="Tests" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
-                                    <Label Text="Test Your Skills" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-
-                        <Border Grid.Row="2" Grid.Column="1"
-                                x:Name="CardLab"
-                                BackgroundColor="#1A1E293B"
-                                Stroke="{StaticResource NeonGreen}"
-                                StrokeThickness="2"
-                                StrokeShape="RoundRectangle 20"
-                                Padding="16"
-                                Margin="4">
-                            <Border.Shadow>
-                                <Shadow x:Name="LabShadow" Brush="#3300FF88" Offset="0,0" Radius="24" Opacity="0.35" />
-                            </Border.Shadow>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="laboratory" />
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
-                                <Border x:Name="LabIconContainer"
-                                        Grid.Column="0"
-                                        WidthRequest="46" HeightRequest="46"
-                                        BackgroundColor="#1500FF88"
-                                        Stroke="{StaticResource NeonGreen}"
-                                        StrokeThickness="1.5"
-                                        StrokeShape="RoundRectangle 23"
-                                        VerticalOptions="Center">
-                                    <Border.Shadow>
-                                        <Shadow Brush="#3300FF88" Offset="0,0" Radius="12" Opacity="0.5" />
-                                    </Border.Shadow>
-                                    <Label Text="🔌" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
-                                    <Label Text="Laboratory" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
-                                    <Label Text="Practical Experiments" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-                    </Grid>
-
-                    <BoxView HeightRequest="100" Color="Transparent" />
-                </VerticalStackLayout>
+                    <!-- Laboratory Card -->
+                    <Border Grid.Row="2" Grid.Column="1"
+                            x:Name="CardLab"
+                            BackgroundColor="{StaticResource BgCard}"
+                            Stroke="{StaticResource AIGreen}"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="16"
+                            Margin="4">
+                        <Border.Shadow>
+                            <Shadow x:Name="LabShadow" Brush="#3306D6A0" Offset="0,0" Radius="24" Opacity="0.35" />
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="laboratory" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                            <Border x:Name="LabIconContainer"
+                                    Grid.Column="0"
+                                    WidthRequest="46" HeightRequest="46"
+                                    BackgroundColor="#1506D6A0"
+                                    Stroke="{StaticResource AIGreen}"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 23"
+                                    VerticalOptions="Center">
+                                <Border.Shadow>
+                                    <Shadow Brush="#3306D6A0" Offset="0,0" Radius="12" Opacity="0.5" />
+                                </Border.Shadow>
+                                <Label Text="🔌" FontSize="22" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                <Label Text="Laboratory" TextColor="White" FontSize="15" FontAttributes="Bold" FontFamily="Cairo" />
+                                <Label Text="Practical Experiments" TextColor="{StaticResource TextSecondary}" FontSize="11" FontFamily="Cairo" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
                 </Grid>
-            </ScrollView>
-        </Grid>
 
+                <BoxView HeightRequest="100" Color="Transparent" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- FAB Backdrop -->
         <BoxView x:Name="FabBackdrop"
+                 Grid.Row="1"
                  IsVisible="False"
                  Color="#66000000"
                  InputTransparent="False">
@@ -320,7 +270,9 @@
             </BoxView.GestureRecognizers>
         </BoxView>
 
+        <!-- FAB Items -->
         <HorizontalStackLayout x:Name="FabItemWhatsApp"
+                               Grid.Row="1"
                                IsVisible="False"
                                Opacity="0"
                                VerticalOptions="End" HorizontalOptions="End"
@@ -328,8 +280,8 @@
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnWhatsAppTapped" />
             </HorizontalStackLayout.GestureRecognizers>
-            <Border BackgroundColor="#CC0F172A"
-                    Stroke="#3300F2FF"
+            <Border BackgroundColor="#CC0A0A1A"
+                    Stroke="#337C3AED"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 10"
                     Padding="14,8"
@@ -341,12 +293,12 @@
                        FontAttributes="Bold" />
             </Border>
             <Border BackgroundColor="{StaticResource BgCard}"
-                    Stroke="{StaticResource NeonGreen}"
+                    Stroke="{StaticResource AIGreen}"
                     StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 20"
                     WidthRequest="40" HeightRequest="40">
                 <Border.Shadow>
-                    <Shadow Brush="#3300FF88" Offset="0,0" Radius="10" Opacity="0.4" />
+                    <Shadow Brush="#3306D6A0" Offset="0,0" Radius="10" Opacity="0.4" />
                 </Border.Shadow>
                 <Label Text="💬"
                        FontSize="18"
@@ -356,6 +308,7 @@
         </HorizontalStackLayout>
 
         <HorizontalStackLayout x:Name="FabItemEval"
+                               Grid.Row="1"
                                IsVisible="False"
                                Opacity="0"
                                VerticalOptions="End" HorizontalOptions="End"
@@ -363,8 +316,8 @@
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnEvalTapped" />
             </HorizontalStackLayout.GestureRecognizers>
-            <Border BackgroundColor="#CC0F172A"
-                    Stroke="#3300F2FF"
+            <Border BackgroundColor="#CC0A0A1A"
+                    Stroke="#337C3AED"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 10"
                     Padding="14,8"
@@ -376,7 +329,7 @@
                        FontAttributes="Bold" />
             </Border>
             <Border BackgroundColor="{StaticResource BgCard}"
-                    Stroke="{StaticResource NeonYellow}"
+                    Stroke="{StaticResource NeuralYellow}"
                     StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 20"
                     WidthRequest="40" HeightRequest="40">
@@ -392,6 +345,7 @@
         </HorizontalStackLayout>
 
         <HorizontalStackLayout x:Name="FabItemData"
+                               Grid.Row="1"
                                IsVisible="False"
                                Opacity="0"
                                VerticalOptions="End" HorizontalOptions="End"
@@ -399,8 +353,8 @@
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnManageDataTapped" />
             </HorizontalStackLayout.GestureRecognizers>
-            <Border BackgroundColor="#CC0F172A"
-                    Stroke="#3300F2FF"
+            <Border BackgroundColor="#CC0A0A1A"
+                    Stroke="#337C3AED"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 10"
                     Padding="14,8"
@@ -412,12 +366,12 @@
                        FontAttributes="Bold" />
             </Border>
             <Border BackgroundColor="{StaticResource BgCard}"
-                    Stroke="{StaticResource NeonPurple}"
+                    Stroke="{StaticResource AIPrimary}"
                     StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 20"
                     WidthRequest="40" HeightRequest="40">
                 <Border.Shadow>
-                    <Shadow Brush="#33BD00FF" Offset="0,0" Radius="10" Opacity="0.4" />
+                    <Shadow Brush="#337C3AED" Offset="0,0" Radius="10" Opacity="0.4" />
                 </Border.Shadow>
                 <Label Text="👤"
                        FontSize="18"
@@ -426,15 +380,17 @@
             </Border>
         </HorizontalStackLayout>
 
+        <!-- FAB Main -->
         <Border x:Name="FabMain"
-                BackgroundColor="{StaticResource Primary}"
+                Grid.Row="1"
+                BackgroundColor="{StaticResource AIPrimary}"
                 StrokeThickness="0"
                 StrokeShape="RoundRectangle 28"
                 WidthRequest="56" HeightRequest="56"
                 VerticalOptions="End" HorizontalOptions="End"
                 Margin="0,0,20,60">
             <Border.Shadow>
-                <Shadow Brush="#6600F2FF"
+                <Shadow Brush="#667C3AED"
                         Offset="0,4"
                         Radius="16"
                         Opacity="0.6" />
@@ -442,7 +398,7 @@
             <Border.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnFabTapped" />
             </Border.GestureRecognizers>
-            <Border BackgroundColor="#1A050B14"
+            <Border BackgroundColor="#1AFFFFFF"
                     StrokeThickness="0"
                     StrokeShape="RoundRectangle 24"
                     WidthRequest="44" HeightRequest="44"
@@ -451,17 +407,19 @@
                        Text="+"
                        FontSize="28"
                        FontAttributes="Bold"
-                       TextColor="#050B14"
+                       TextColor="White"
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center" />
             </Border>
         </Border>
 
+        <!-- Manage Data Modal -->
         <Grid x:Name="ManageOverlay"
+              Grid.Row="1"
               IsVisible="False"
               BackgroundColor="{StaticResource ModalOverlay}">
             <Border BackgroundColor="{StaticResource BgCard}"
-                    Stroke="{StaticResource Primary}"
+                    Stroke="{StaticResource AIPrimary}"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 25"
                     Padding="28"
@@ -481,7 +439,7 @@
                         <Label Grid.Column="1"
                                Text="×"
                                FontSize="26"
-                               TextColor="{StaticResource Primary}"
+                               TextColor="{StaticResource AICyan}"
                                VerticalTextAlignment="Center">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnCloseModalTapped" />
@@ -490,14 +448,14 @@
                     </Grid>
 
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Your Name" TextColor="{StaticResource Primary}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
+                        <Label Text="Your Name" TextColor="{StaticResource AICyan}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
                         <Border BackgroundColor="{StaticResource InputBg}" Stroke="#334155" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="12,0">
                             <Entry x:Name="EditName" IsEnabled="False" TextColor="White" FontFamily="Cairo" FontSize="14" BackgroundColor="Transparent" />
                         </Border>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Academic Level" TextColor="{StaticResource Primary}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
+                        <Label Text="Academic Level" TextColor="{StaticResource AICyan}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
                         <Border BackgroundColor="{StaticResource InputBg}" Stroke="#334155" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="12,0">
                             <Picker x:Name="EditYear" IsEnabled="False" TextColor="White" FontFamily="Cairo" FontSize="14" BackgroundColor="Transparent">
                                 <Picker.ItemsSource>
@@ -514,7 +472,7 @@
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="The Semester" TextColor="{StaticResource Primary}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
+                        <Label Text="The Semester" TextColor="{StaticResource AICyan}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
                         <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
                             <Border x:Name="EditTerm1" Stroke="#334155" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="12" BackgroundColor="{StaticResource InputBg}">
                                 <Border.GestureRecognizers>
@@ -532,17 +490,17 @@
                     </VerticalStackLayout>
 
                     <Grid ColumnDefinitions="*, *" ColumnSpacing="10" Margin="0,8,0,0">
-                        <Border x:Name="EditSaveBtn" BackgroundColor="{StaticResource Primary}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="44">
+                        <Border x:Name="EditSaveBtn" BackgroundColor="{StaticResource AIPrimary}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="44">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnEditSaveTapped" />
                             </Border.GestureRecognizers>
-                            <Label x:Name="EditSaveLabel" Text="Change" TextColor="#050B14" FontFamily="Cairo" FontSize="14" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            <Label x:Name="EditSaveLabel" Text="Change" TextColor="White" FontFamily="Cairo" FontSize="14" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
                         </Border>
-                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="#FF4444" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="44">
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="#FF4757" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="44">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnDeleteTapped" />
                             </Border.GestureRecognizers>
-                            <Label Text="Delete Data" TextColor="#FF4444" FontFamily="Cairo" FontSize="14" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            <Label Text="Delete Data" TextColor="#FF4757" FontFamily="Cairo" FontSize="14" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
                         </Border>
                     </Grid>
                 </VerticalStackLayout>

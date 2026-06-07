@@ -102,10 +102,10 @@ public partial class PdfViewerPage : ContentPage
         PdfViewer.Navigated += handler;
     }
 
-    private async void OnBackTapped(object? sender, TappedEventArgs e)
+    private void OnTitleBarBack(object? sender, EventArgs e)
     {
         PdfViewer.Source = new UrlWebViewSource { Url = "about:blank" };
-        await Shell.Current.GoToAsync("..");
+        _ = Shell.Current.GoToAsync("..");
     }
 
     private async void OnDownloadTapped(object? sender, TappedEventArgs e)
