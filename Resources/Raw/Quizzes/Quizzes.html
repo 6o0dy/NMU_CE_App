@@ -1683,7 +1683,7 @@
       } catch (e) {
       if (isFirstLoad) {
       // Try loading via native C# bridge (uses disk cache)
-      window.location = 'https://nmu.app/quiz/load?path=' + encodeURIComponent(quizObj.path);
+      window.location = 'app://quiz/load?path=' + encodeURIComponent(quizObj.path);
       }
       }
       }

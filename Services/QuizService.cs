@@ -338,8 +338,24 @@ public class QuizService
         {
             var url = $"{BaseDownload}{ArchiveId}/{subjectPath}";
             var cachedPath = CdnCacheService.GetCachedFile(url);
-            if (cachedPath == null) return null;
 
+            // Fallback: try direct path from GetQuizDiskCacheDir
+            if (cachedPath == null)
+            {
+                var segments = subjectPath.Split('/');
+                if (segments.Length >= 5)
+                {
+                    var level = segments[1];
+                    var term = segments[2];
+                    var quizDir = CdnCacheService.GetQuizDiskCacheDir(level, term);
+                    var filename = segments.Last();
+                    var directPath = Path.Combine(quizDir, filename);
+                    if (File.Exists(directPath))
+                        cachedPath = directPath;
+                }
+            }
+
+            if (cachedPath == null) return null;
             var content = File.ReadAllText(cachedPath);
             return ParseQuizContent(content);
         }
@@ -351,21 +367,28 @@ public class QuizService
 
     private async Task<List<QuizChapter>> FetchQuizFromServerAsync(string subjectPath, string cacheKey)
     {
-        var segments = subjectPath.Split('/');
-        var encoded = string.Join("/", segments.Select(Uri.EscapeDataString));
-        var url = $"{BaseDownload}{ArchiveId}/{encoded}";
-        using var resp = await _http.GetAsync(url);
-        var contentType = resp.Content.Headers.ContentType?.MediaType ?? "none";
-        var content = await resp.Content.ReadAsStringAsync();
-        var preview = content.Length > 200 ? content[..200] : content;
-        if (!resp.IsSuccessStatusCode || contentType != "application/json")
-            throw new HttpRequestException($"URL: {url}\nHTTP {(int)resp.StatusCode}, Type: {contentType}\nPreview: {preview}");
+        try
+        {
+            var segments = subjectPath.Split('/');
+            var encoded = string.Join("/", segments.Select(Uri.EscapeDataString));
+            var url = $"{BaseDownload}{ArchiveId}/{encoded}";
+            using var resp = await _http.GetAsync(url);
+            var contentType = resp.Content.Headers.ContentType?.MediaType ?? "none";
+            if (!resp.IsSuccessStatusCode || contentType != "application/json")
+                throw new HttpRequestException($"HTTP {(int)resp.StatusCode}, Type: {contentType}");
 
-        var chapters = ParseQuizContent(content);
-        var json = JsonSerializer.Serialize(chapters);
-        _lastQuizJsons[cacheKey] = json;
-        Preferences.Set(cacheKey, json);
-        return chapters;
+            var content = await resp.Content.ReadAsStringAsync();
+            var chapters = ParseQuizContent(content);
+            var json = JsonSerializer.Serialize(chapters);
+            _lastQuizJsons[cacheKey] = json;
+            Preferences.Set(cacheKey, json);
+            return chapters;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[QuizService] FetchQuiz failed: {ex.Message}");
+            return [];
+        }
     }
 
     private async Task RefreshQuizInBackgroundAsync(string subjectPath, string cacheKey)

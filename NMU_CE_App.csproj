@@ -25,7 +25,10 @@
 		     For individual files, you can override by setting Inflator metadata:
 		       <MauiXaml Update="MyPage.xaml" Inflator="Default" /> (reverts to defaults: Runtime for Debug, XamlC for Release)
 		       <MauiXaml Update="MyPage.xaml" Inflator="Runtime" /> (force runtime inflation) -->
-		<MauiXamlInflator>SourceGen</MauiXamlInflator>
+		<!-- <MauiXamlInflator>SourceGen</MauiXamlInflator> -->
+
+		<!-- Build assemblies into APK instead of __override__ (fixes crash after clear data) -->
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
 
 		<!-- Display name -->
 		<ApplicationTitle>NMU_CE_App</ApplicationTitle>
@@ -45,6 +48,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+	</PropertyGroup>
+
+	<!-- Android-specific settings (architectures + trimming) -->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+		<RuntimeIdentifiers>android-arm;android-arm64;android-x86</RuntimeIdentifiers>
+		<AndroidLinkMode Condition="'$(Configuration)' == 'Debug'">SdkOnly</AndroidLinkMode>
+		<AndroidLinkMode Condition="'$(Configuration)' == 'Release'">Full</AndroidLinkMode>
+		<PublishTrimmed Condition="'$(Configuration)' == 'Release'">true</PublishTrimmed>
 	</PropertyGroup>
 
 	<ItemGroup>

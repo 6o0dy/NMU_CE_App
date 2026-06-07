@@ -167,6 +167,15 @@ public partial class QuizWebViewPage : ContentPage
         try
         {
             var chapters = await _quizService.GetQuizAsync(path);
+            if (chapters.Count == 0)
+            {
+                LoadingOverlay.IsVisible = true;
+                LoadingLabel.Text = "No data available offline";
+                CacheSummaryLabel.Text = "Quiz data wasn't pre-cached. Connect to the internet and open this subject once, then it'll work offline.";
+                CacheSummaryLabel.TextColor = Color.FromArgb("#FFAA44");
+                CacheSummaryLabel.IsVisible = true;
+                return;
+            }
             var chaptersJson = JsonSerializer.Serialize(chapters);
             var metaJson = await _quizService.GetRawMetaAsync();
             var orderJson = await _quizService.GetOrderConfigAsync();

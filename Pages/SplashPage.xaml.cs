@@ -11,20 +11,21 @@ public partial class SplashPage : ContentPage
     public SplashPage()
     {
         InitializeComponent();
-        UpdateFooter();
-        YearPicker.SelectedIndex = 0;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await HandleStartupFlow();
-    }
-
-    protected override void OnSizeAllocated(double width, double height)
-    {
-        base.OnSizeAllocated(width, height);
-        GridCanvas?.Invalidate();
+        try
+        {
+            UpdateFooter();
+            YearPicker.SelectedIndex = 0;
+            await HandleStartupFlow();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[SplashPage] CRASH: {ex}");
+        }
     }
 
     private void UpdateFooter()
@@ -34,12 +35,6 @@ public partial class SplashPage : ContentPage
 
     private async Task HandleStartupFlow()
     {
-        if (!_session.HasSeenScan)
-        {
-            await ShowLoadingScreen();
-            _session.MarkScanDone();
-        }
-
         if (!_session.HasData)
         {
             await Task.Delay(200);
@@ -50,23 +45,6 @@ public partial class SplashPage : ContentPage
             await Task.Delay(300);
             await GoToHome();
         }
-    }
-
-    private async Task ShowLoadingScreen()
-    {
-        LoadingOverlay.IsVisible = true;
-        LoadingOverlay.Opacity = 0;
-        await LoadingOverlay.FadeToAsync(1, 200);
-
-        GlowLine.WidthRequest = 0;
-        GlowLine.AnchorX = 0.5;
-
-        await Task.Delay(300);
-        await GlowLine.ScaleXToAsync(1, 1200, Easing.CubicOut);
-
-        await Task.Delay(200);
-        await LoadingOverlay.FadeToAsync(0, 300);
-        LoadingOverlay.IsVisible = false;
     }
 
     private async Task ShowSetupModal()
@@ -140,32 +118,5 @@ public partial class SplashPage : ContentPage
         SetupOverlay.IsVisible = false;
 
         await GoToHome();
-    }
-
-    private async void OnFullscreenTapped(object? sender, TappedEventArgs e)
-    {
-        ToggleFullscreen();
-    }
-
-    private void ToggleFullscreen()
-    {
-#if WINDOWS
-        try
-        {
-            var mauiWindow = App.Current?.Windows[0];
-            if (mauiWindow?.Handler?.PlatformView is Microsoft.UI.Xaml.Window nativeWindow)
-            {
-                var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-                var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
-                var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
-
-                if (appWindow.Presenter.Kind == Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen)
-                    appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.Default);
-                else
-                    appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen);
-            }
-        }
-        catch { }
-#endif
     }
 }

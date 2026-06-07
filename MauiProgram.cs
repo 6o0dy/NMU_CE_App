@@ -9,6 +9,29 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        try
+        {
+            return BuildMauiApp();
+        }
+        catch (Exception ex)
+        {
+            // Log to all available targets before crashing
+            System.Diagnostics.Debug.WriteLine($"[FATAL] CreateMauiApp: {ex}");
+#if ANDROID
+            try { Android.Util.Log.Error("NMU_CE", $"FATAL CreateMauiApp: {ex}"); } catch { }
+#endif
+            try
+            {
+                var crashPath = Path.Combine(FileSystem.CacheDirectory, "crash.log");
+                File.WriteAllText(crashPath, $"CreateMauiApp: {ex}");
+            }
+            catch { }
+            throw;
+        }
+    }
+
+    private static MauiApp BuildMauiApp()
+    {
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
@@ -48,8 +71,9 @@ public static class MauiProgram
                 {
                     if (handler.PlatformView is Android.Webkit.WebView wv)
                     {
-                        if (wv.WebViewClient == null || !(wv.WebViewClient is CachedWebViewClient))
-                            wv.SetWebViewClient(new CachedWebViewClient());
+                        var original = wv.WebViewClient;
+                        if (!(original is CachedWebViewClient))
+                            wv.SetWebViewClient(new CachedWebViewClient(original));
                     }
                 });
 #elif IOS
