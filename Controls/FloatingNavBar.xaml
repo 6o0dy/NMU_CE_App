@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NMU_CE_App.Controls.FloatingNavBar"
+             x:Name="Self"
+             BackgroundColor="Transparent"
+             HeightRequest="50"
+             IsVisible="False">
+    <Border BackgroundColor="#CC0F172A"
+            StrokeThickness="0"
+            HeightRequest="50"
+            Padding="8,0">
+        <Grid ColumnDefinitions="Auto, *, Auto">
+            <Border x:Name="BackBtn"
+                    Grid.Column="0"
+                    BackgroundColor="#0DFFFFFF"
+                    Stroke="#1FFFFFFF"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="4"
+                    WidthRequest="34" HeightRequest="34"
+                    VerticalOptions="Center"
+                    IsVisible="False">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="←"
+                       FontSize="18"
+                       TextColor="{StaticResource Primary}"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Border>
+
+            <Label x:Name="NavTitle"
+                   Grid.Column="1"
+                   TextColor="{StaticResource TextPrimary}"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   FontFamily="Cairo"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center" />
+
+            <Border x:Name="FullBtn"
+                    Grid.Column="2"
+                    BackgroundColor="#0DFFFFFF"
+                    Stroke="#1FFFFFFF"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="4"
+                    WidthRequest="34" HeightRequest="34"
+                    VerticalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnFullscreenTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="⛶"
+                       FontSize="18"
+                       TextColor="{StaticResource Primary}"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Border>
+        </Grid>
+    </Border>
+</ContentView>

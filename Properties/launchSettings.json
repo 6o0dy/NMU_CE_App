@@ -3,7 +3,7 @@
     "Windows Machine": {
       "commandName": "Project",
       "nativeDebugging": false,
-      "jsWebView2Debugging": true
+      "jsWebView2Debugging": false
     }
   }
 }
