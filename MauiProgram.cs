@@ -52,6 +52,34 @@ public static class MauiProgram
                             wv.SetWebViewClient(new CachedWebViewClient());
                     }
                 });
+#elif IOS
+                WebViewHandler.Mapper.AppendToMapping("CachedScheme", (handler, view) =>
+                {
+                    if (handler.PlatformView is WebKit.WKWebView wv)
+                    {
+                        wv.Configuration.SetUrlSchemeHandler(new CachedSchemeHandler(), "nmu-cache");
+                    }
+                });
+#elif MACCATALYST
+                WebViewHandler.Mapper.AppendToMapping("CachedScheme", (handler, view) =>
+                {
+                    if (handler.PlatformView is WebKit.WKWebView wv)
+                    {
+                        wv.Configuration.SetUrlSchemeHandler(new CachedSchemeHandler(), "nmu-cache");
+                    }
+                });
+#elif WINDOWS
+                WebViewHandler.Mapper.AppendToMapping("CachedWebView", (handler, view) =>
+                {
+                    if (handler.PlatformView is Microsoft.UI.Xaml.Controls.WebView2 wv)
+                    {
+                        wv.CoreWebView2Initialized += (s, e) =>
+                        {
+                            try { CachedWebViewHandler.Attach(wv); }
+                            catch { }
+                        };
+                    }
+                });
 #endif
             });
 

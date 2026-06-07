@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace NMU_CE_App.Services;
 
@@ -7,11 +8,19 @@ public static class CdnCacheService
 {
     private static readonly HttpClient _http = new();
     private static readonly string CacheDir = Path.Combine(FileSystem.CacheDirectory, "cdn");
-    private static readonly string VersionFile = Path.Combine(CacheDir, ".version");
 
     private const string BaseMeta = "https://archive.org/metadata/";
     private const string BaseDownload = "https://archive.org/download/";
     private const string ArchiveId = "nmu.ce";
+    private const string CacheScheme = "nmu-cache://";
+
+    private static readonly Dictionary<string, string> SchemeDomainMap = new()
+    {
+        { "nmu-cache://cdnjs/", "https://cdnjs.cloudflare.com/" },
+        { "nmu-cache://jsdelivr/", "https://cdn.jsdelivr.net/" },
+        { "nmu-cache://fonts/", "https://fonts.googleapis.com/" },
+        { "nmu-cache://gstatic/", "https://fonts.gstatic.com/" },
+    };
 
     public static readonly string[] CdnUrls =
     [
@@ -75,21 +84,17 @@ public static class CdnCacheService
         }
     }
 
-    /// Download all CDN resources in background
+    /// Download all CDN resources in background (new or missing files only)
     public static async Task PreCacheAllAsync()
     {
-        if (File.Exists(VersionFile)) return;
-
         foreach (var url in CdnUrls)
         {
             if (!IsCached(url))
                 await DownloadAndCacheAsync(url);
         }
-
-        try { await File.WriteAllTextAsync(VersionFile, "1"); } catch { }
     }
 
-    /// Download & cache all quiz data from Archive.org for a given level/term
+    /// Bulk-download all quiz JSON files for a given level/term (new or missing only)
     public static async Task<Dictionary<string, string>> PreCacheQuizDataAsync(string level, string term)
     {
         var result = new Dictionary<string, string>();
@@ -98,17 +103,24 @@ public static class CdnCacheService
             var metaUrl = $"{BaseMeta}{ArchiveId}";
             var metaStr = await _http.GetStringAsync(metaUrl);
             using var doc = JsonDocument.Parse(metaStr);
+
+            // 1. Cache meta JSON to Preferences + disk for offline use
+            var metaDiskPath = Path.Combine(FileSystem.CacheDirectory, "quiz_meta.json");
+            await File.WriteAllTextAsync(metaDiskPath, metaStr);
+            Preferences.Set("nmu_quiz_rawmeta", metaStr);
+
+            // 2. Download all quiz files
             var files = doc.RootElement.GetProperty("files").EnumerateArray();
             var quizPathPrefix = $"NMU/{level}/{term}/QUIZE/";
+            string? orderConfigJson = null;
 
             foreach (var f in files)
             {
                 var name = f.GetProperty("name").GetString() ?? "";
                 if (!name.StartsWith(quizPathPrefix) || !name.EndsWith(".json"))
                     continue;
-                if (name.EndsWith("order_config.json"))
-                    continue;
 
+                var isOrderConfig = name.EndsWith("order_config.json");
                 var url = $"{BaseDownload}{ArchiveId}/{name}";
                 var cachePath = GetCachePath(url);
                 if (!File.Exists(cachePath))
@@ -122,11 +134,70 @@ public static class CdnCacheService
                     }
                     catch { }
                 }
-                result[name] = cachePath;
+
+                if (isOrderConfig)
+                {
+                    try
+                    {
+                        orderConfigJson = File.Exists(cachePath)
+                            ? await File.ReadAllTextAsync(cachePath)
+                            : null;
+                    }
+                    catch { }
+                }
+                else
+                {
+                    result[name] = cachePath;
+                }
+            }
+
+            // 3. Cache order_config to Preferences + disk
+            if (orderConfigJson != null)
+            {
+                var orderDiskPath = Path.Combine(FileSystem.CacheDirectory, $"quiz_order_{level}_{term}.json");
+                await File.WriteAllTextAsync(orderDiskPath, orderConfigJson);
+                Preferences.Set($"nmu_quiz_order_{level}_{term}", orderConfigJson);
             }
         }
         catch { }
         return result;
+    }
+
+    public static string ReplaceCdnUrlsWithCacheScheme(string html)
+    {
+        html = Regex.Replace(html,
+            @"https://cdnjs\.cloudflare\.com/",
+            "nmu-cache://cdnjs/",
+            RegexOptions.IgnoreCase);
+        html = Regex.Replace(html,
+            @"https://cdn\.jsdelivr\.net/",
+            "nmu-cache://jsdelivr/",
+            RegexOptions.IgnoreCase);
+        html = Regex.Replace(html,
+            @"https://fonts\.googleapis\.com/",
+            "nmu-cache://fonts/",
+            RegexOptions.IgnoreCase);
+        html = Regex.Replace(html,
+            @"https://fonts\.gstatic\.com/",
+            "nmu-cache://gstatic/",
+            RegexOptions.IgnoreCase);
+        html = Regex.Replace(html,
+            @"https://archive\.org/download/",
+            "nmu-cache://archive/",
+            RegexOptions.IgnoreCase);
+        return html;
+    }
+
+    public static string OriginalUrlFromScheme(string schemeUrl)
+    {
+        foreach (var kvp in SchemeDomainMap)
+            if (schemeUrl.StartsWith(kvp.Key))
+                return kvp.Value + schemeUrl[kvp.Key.Length..];
+
+        if (schemeUrl.StartsWith("nmu-cache://archive/"))
+            return "https://archive.org/download/" + schemeUrl["nmu-cache://archive/".Length..];
+
+        return schemeUrl;
     }
 
     public static string GetMimeType(string url)
@@ -143,8 +214,16 @@ public static class CdnCacheService
         return "application/octet-stream";
     }
 
+    public static string GetQuizDiskCacheDir(string level, string term)
+    {
+        var basePath = GetCachePath(BaseDownload + ArchiveId);
+        return Path.Combine(basePath, "NMU", level, term, "QUIZE");
+    }
+
     public static bool IsCdnUrl(string url)
     {
+        if (url.StartsWith(CacheScheme))
+            return true;
         return url.StartsWith("https://cdnjs.cloudflare.com/") ||
                url.StartsWith("https://cdn.jsdelivr.net/") ||
                url.StartsWith("https://fonts.gstatic.com/") ||

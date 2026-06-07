@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NMU_CE_App.Pages.DebugErrorPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#050b14">
+
+    <Grid RowDefinitions="Auto, *, Auto" Padding="25">
+        <Label Grid.Row="0" Text="Crash Debug Info"
+               FontSize="22" FontAttributes="Bold"
+               TextColor="#FF4444"
+               Margin="0,50,0,20" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Error Details:" TextColor="#AAAAAA" FontSize="14" FontFamily="Cairo" />
+                <Border BackgroundColor="#1A000000" Stroke="#FF4444" StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10" Padding="15">
+                    <Label x:Name="ErrorDetailsLabel"
+                           Text="No error data"
+                           TextColor="#FF8888"
+                           FontSize="13"
+                           FontFamily="Consolas" />
+                </Border>
+
+                <Label x:Name="StackTraceLabel"
+                       TextColor="#666666"
+                       FontSize="11"
+                       FontFamily="Consolas"
+                       Margin="0,10,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button Grid.Row="2"
+                Text="Go Back"
+                BackgroundColor="#FF4444"
+                TextColor="White"
+                FontFamily="Cairo"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                HeightRequest="50"
+                Margin="0,20,0,40"
+                Clicked="OnGoBackClicked" />
+    </Grid>
+</ContentPage>

@@ -12,6 +12,11 @@ public static class QuizWebViewService
         // Inline pako library for TikZ circuit rendering (CDN scripts don't load from file://)
         html = await InlinePakoAsync(html);
 
+#if IOS || MACCATALYST
+        // Replace CDN URLs with custom scheme so WKURLSchemeHandler can intercept them
+        html = CdnCacheService.ReplaceCdnUrlsWithCacheScheme(html);
+#endif
+
         var script = $@"
 <script>
 window.__CACHED_META__ = {metaJson};

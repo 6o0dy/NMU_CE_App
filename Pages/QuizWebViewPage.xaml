@@ -17,16 +17,23 @@
               Grid.RowSpan="2"
               BackgroundColor="#FA050B14"
               IsVisible="True">
-            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="15">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="12">
                 <ActivityIndicator IsRunning="True"
                                     Color="#00F2FF"
                                     WidthRequest="40" HeightRequest="40" />
                 <Label x:Name="LoadingLabel"
-                       Text="Loading Quiz..."
+                       Text="Starting..."
                        FontSize="16"
                        FontFamily="Cairo"
                        TextColor="#00F2FF"
                        HorizontalTextAlignment="Center" />
+                <Label x:Name="CacheSummaryLabel"
+                       Text=""
+                       FontSize="12"
+                       FontFamily="Cairo"
+                       TextColor="#6699AA"
+                       HorizontalTextAlignment="Center"
+                       IsVisible="False" />
             </VerticalStackLayout>
         </Grid>
     </Grid>

@@ -31,6 +31,16 @@ public class QuizService
         var term = profile?.Term.Replace(" ", "_") ?? "Semester_1";
         var cacheKey = $"{SubjectsCachePrefix}{level}_{term}";
 
+        // 1. Try disk cache first (from PreCacheQuizDataAsync)
+        var diskSubjects = LoadSubjectsFromDiskCache(level, term);
+        if (diskSubjects != null)
+        {
+            _lastSubjectsJson = JsonSerializer.Serialize(diskSubjects);
+            _ = RefreshSubjectsInBackgroundAsync(level, term, cacheKey);
+            return diskSubjects;
+        }
+
+        // 2. Try Preferences cache
         var cached = Preferences.Get(cacheKey, "");
         if (!string.IsNullOrEmpty(cached))
         {
@@ -47,7 +57,43 @@ public class QuizService
             catch { Preferences.Remove(cacheKey); }
         }
 
+        // 3. Fetch from server
         return await FetchSubjectsFromServerAsync(level, term, cacheKey);
+    }
+
+    private List<QuizSubject>? LoadSubjectsFromDiskCache(string level, string term)
+    {
+        try
+        {
+            var quizDir = CdnCacheService.GetQuizDiskCacheDir(level, term);
+            if (!Directory.Exists(quizDir)) return null;
+
+            var files = Directory.GetFiles(quizDir, "*.json");
+            if (files.Length == 0) return null;
+
+            var quizPath = $"NMU/{level}/{term}/QUIZE/";
+            var subjects = new List<QuizSubject>();
+
+            foreach (var file in files)
+            {
+                var name = Path.GetFileName(file);
+                if (name.EndsWith("order_config.json")) continue;
+
+                var displayName = name.Replace(".json", "").Replace("_", " ");
+                subjects.Add(new QuizSubject
+                {
+                    Name = displayName,
+                    Path = $"{quizPath}{name}",
+                    Rel = name
+                });
+            }
+
+            return subjects.Count > 0 ? subjects : null;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private async Task<List<QuizSubject>> FetchSubjectsFromServerAsync(string level, string term, string cacheKey)
@@ -118,8 +164,15 @@ public class QuizService
         catch { }
     }
 
+    private static string GetMetaDiskPath() =>
+        Path.Combine(FileSystem.CacheDirectory, "quiz_meta.json");
+
+    private static string GetOrderDiskPath(string level, string term) =>
+        Path.Combine(FileSystem.CacheDirectory, $"quiz_order_{level}_{term}.json");
+
     public async Task<string> GetRawMetaAsync()
     {
+        // 1. Try Preferences
         var cached = Preferences.Get(MetaCacheKey, "");
         if (!string.IsNullOrEmpty(cached))
         {
@@ -128,15 +181,38 @@ public class QuizService
             return cached;
         }
 
+        // 2. Try disk fallback
+        var diskPath = GetMetaDiskPath();
+        if (File.Exists(diskPath))
+        {
+            try
+            {
+                var json = await File.ReadAllTextAsync(diskPath);
+                _lastMetaJson = json;
+                _ = RefreshMetaInBackgroundAsync();
+                return json;
+            }
+            catch { }
+        }
+
+        // 3. Fetch from server
         return await FetchMetaFromServerAsync();
     }
 
     private async Task<string> FetchMetaFromServerAsync()
     {
-        var json = await _http.GetStringAsync($"{BaseMeta}{ArchiveId}");
-        _lastMetaJson = json;
-        Preferences.Set(MetaCacheKey, json);
-        return json;
+        try
+        {
+            var json = await _http.GetStringAsync($"{BaseMeta}{ArchiveId}");
+            _lastMetaJson = json;
+            Preferences.Set(MetaCacheKey, json);
+            await File.WriteAllTextAsync(GetMetaDiskPath(), json);
+            return json;
+        }
+        catch
+        {
+            return "{}";
+        }
     }
 
     private async Task RefreshMetaInBackgroundAsync()
@@ -148,6 +224,7 @@ public class QuizService
             {
                 _lastMetaJson = json;
                 Preferences.Set(MetaCacheKey, json);
+                await File.WriteAllTextAsync(GetMetaDiskPath(), json);
             }
         }
         catch { }
@@ -160,6 +237,7 @@ public class QuizService
         var term = profile?.Term.Replace(" ", "_") ?? "Semester_1";
         var cacheKey = $"{OrderCachePrefix}{level}_{term}";
 
+        // 1. Try Preferences
         var cached = Preferences.Get(cacheKey, "");
         if (!string.IsNullOrEmpty(cached))
         {
@@ -168,6 +246,21 @@ public class QuizService
             return cached;
         }
 
+        // 2. Try disk fallback
+        var diskPath = GetOrderDiskPath(level, term);
+        if (File.Exists(diskPath))
+        {
+            try
+            {
+                var json = await File.ReadAllTextAsync(diskPath);
+                _lastOrderJson = json;
+                _ = RefreshOrderInBackgroundAsync(level, term, cacheKey);
+                return json;
+            }
+            catch { }
+        }
+
+        // 3. Fetch from server
         return await FetchOrderFromServerAsync(level, term, cacheKey);
     }
 
@@ -179,6 +272,7 @@ public class QuizService
             var json = await _http.GetStringAsync($"{BaseDownload}{ArchiveId}/{quizPath}order_config.json");
             _lastOrderJson = json;
             Preferences.Set(cacheKey, json);
+            await File.WriteAllTextAsync(GetOrderDiskPath(level, term), json);
             return json;
         }
         catch
@@ -197,6 +291,7 @@ public class QuizService
             {
                 _lastOrderJson = json;
                 Preferences.Set(cacheKey, json);
+                await File.WriteAllTextAsync(GetOrderDiskPath(level, term), json);
             }
         }
         catch { }
@@ -206,6 +301,17 @@ public class QuizService
     {
         var cacheKey = $"{QuizDataCachePrefix}{GetPathHash(subjectPath)}";
 
+        // 1. Try disk cache first (from PreCacheQuizDataAsync)
+        var diskChapters = LoadQuizFromDiskCache(subjectPath);
+        if (diskChapters != null)
+        {
+            var json = JsonSerializer.Serialize(diskChapters);
+            _lastQuizJsons[cacheKey] = json;
+            _ = RefreshQuizInBackgroundAsync(subjectPath, cacheKey);
+            return diskChapters;
+        }
+
+        // 2. Try Preferences cache
         var cached = Preferences.Get(cacheKey, "");
         if (!string.IsNullOrEmpty(cached))
         {
@@ -222,7 +328,25 @@ public class QuizService
             catch { Preferences.Remove(cacheKey); }
         }
 
+        // 3. Fetch from server
         return await FetchQuizFromServerAsync(subjectPath, cacheKey);
+    }
+
+    private List<QuizChapter>? LoadQuizFromDiskCache(string subjectPath)
+    {
+        try
+        {
+            var url = $"{BaseDownload}{ArchiveId}/{subjectPath}";
+            var cachedPath = CdnCacheService.GetCachedFile(url);
+            if (cachedPath == null) return null;
+
+            var content = File.ReadAllText(cachedPath);
+            return ParseQuizContent(content);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private async Task<List<QuizChapter>> FetchQuizFromServerAsync(string subjectPath, string cacheKey)

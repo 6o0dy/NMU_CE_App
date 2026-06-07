@@ -1468,45 +1468,50 @@
           appState.quizList = JSON.parse(cachedList);
           renderSubjects();
           fetchQuizListBackground();
+        } else if (window.__CACHED_META__ && window.__CACHED_META__.files) {
+          processMetaData(window.__CACHED_META__, window.__CACHED_ORDER__, true);
         } else {
           await fetchQuizListBackground(true);
         }
       }
+      function processMetaData(data, orderData, forceRender) {
+        let orderList = [];
+        if (orderData && orderData.order) {
+          orderList = orderData.order;
+          localStorage.setItem(CACHE_KEY_ORDER, JSON.stringify(orderList));
+        }
+        const files = data.files.filter(f => f.name.startsWith(QUIZ_PATH) && f.name.endsWith('.json') && !f.name.endsWith('order_config.json'));
+        let processed = files.map(f => {
+          const rel = f.name.substring(QUIZ_PATH.length);
+          let name = rel.split('/')[0].replace('.json', '').replace(/_/g, ' ');
+          return { name: name, path: f.name, rel: rel };
+        });
+        if(orderList.length > 0) {
+          processed.sort((a, b) => {
+            let idxA = orderList.findIndex(k => a.rel.includes(k));
+            let idxB = orderList.findIndex(k => b.rel.includes(k));
+            if(idxA === -1) idxA = 999;
+            if(idxB === -1) idxB = 999;
+            return idxA - idxB || a.name.localeCompare(b.name);
+          });
+        } else {
+          processed.sort((a, b) => a.name.localeCompare(b.name));
+        }
+        appState.quizList = processed;
+        localStorage.setItem(CACHE_KEY_LIST, JSON.stringify(processed));
+        if(forceRender || document.getElementById('subjects-grid').innerHTML === '') renderSubjects();
+      }
+
       async function fetchQuizListBackground(forceRender = false) {
         try {
-      // التعديل الأول: كسر الكاش لملف الفهرس
-      const res = await fetch(`${CONFIG.baseMeta}${CONFIG.archiveId}?t=${new Date().getTime()}`, { cache: "no-store" });
-      const data = await res.json();
-      let orderList = [];
-      try {
-      // التعديل الثاني: كسر الكاش لملف الترتيب
-      const orderRes = await fetch(`${CONFIG.baseDownload}${CONFIG.archiveId}/${QUIZ_PATH}order_config.json?t=${new Date().getTime()}`, { cache: "no-store" });
-      if(orderRes.ok) {
-      const orderJson = await orderRes.json();
-      orderList = orderJson.order || [];
-      localStorage.setItem(CACHE_KEY_ORDER, JSON.stringify(orderList));
-      }
-      } catch(e) {}
-          const files = data.files.filter(f => f.name.startsWith(QUIZ_PATH) && f.name.endsWith('.json') && !f.name.endsWith('order_config.json'));
-          let processed = files.map(f => {
-            const rel = f.name.substring(QUIZ_PATH.length);
-            let name = rel.split('/')[0].replace('.json', '').replace(/_/g, ' ');
-            return { name: name, path: f.name, rel: rel };
-          });
-          if(orderList.length > 0) {
-            processed.sort((a, b) => {
-              let idxA = orderList.findIndex(k => a.rel.includes(k));
-              let idxB = orderList.findIndex(k => b.rel.includes(k));
-              if(idxA === -1) idxA = 999;
-              if(idxB === -1) idxB = 999;
-              return idxA - idxB || a.name.localeCompare(b.name);
-            });
-          } else {
-            processed.sort((a, b) => a.name.localeCompare(b.name));
-          }
-          appState.quizList = processed;
-          localStorage.setItem(CACHE_KEY_LIST, JSON.stringify(processed));
-          if(forceRender || document.getElementById('subjects-grid').innerHTML === '') renderSubjects();
+          const res = await fetch(`${CONFIG.baseMeta}${CONFIG.archiveId}?t=${new Date().getTime()}`, { cache: "no-store" });
+          const data = await res.json();
+          let orderData = null;
+          try {
+            const orderRes = await fetch(`${CONFIG.baseDownload}${CONFIG.archiveId}/${QUIZ_PATH}order_config.json?t=${new Date().getTime()}`, { cache: "no-store" });
+            if(orderRes.ok) orderData = await orderRes.json();
+          } catch(e) {}
+          processMetaData(data, orderData, forceRender);
         } catch (e) {
           if(forceRender) document.getElementById('subjects-loader').innerHTML = 'Connection Failed.';
         }
@@ -1664,7 +1669,6 @@
 
       async function fetchContentAndCache(quizObj, key, isFirstLoad) {
       try {
-      // التعديل الثالث: كسر الكاش لملف الأسئلة نفسه
       const res = await fetch(`${CONFIG.baseDownload}${CONFIG.archiveId}/${quizObj.path}?t=${new Date().getTime()}`, { cache: "no-store" });
       const json = await res.json();
 
@@ -1678,8 +1682,8 @@
 
       } catch (e) {
       if (isFirstLoad) {
-      showCustomAlert("Failed to download quiz.");
-      resetToHome();
+      // Try loading via native C# bridge (uses disk cache)
+      window.location = 'https://nmu.app/quiz/load?path=' + encodeURIComponent(quizObj.path);
       }
       }
       }

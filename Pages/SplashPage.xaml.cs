@@ -131,6 +131,11 @@ public partial class SplashPage : ContentPage
 
         _session.SaveStudentProfile(profile);
 
+        // Pre-cache quiz data for the selected level/term in background
+        var level = year.Replace(" ", "_");
+        var term = _selectedTerm.Replace(" ", "_");
+        _ = CdnCacheService.PreCacheQuizDataAsync(level, term);
+
         await SetupOverlay.FadeToAsync(0, 200);
         SetupOverlay.IsVisible = false;
 
