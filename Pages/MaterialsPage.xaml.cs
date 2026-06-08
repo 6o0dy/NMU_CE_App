@@ -1,4 +1,5 @@
 using System.Text.Json;
+using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
@@ -373,7 +374,7 @@ public partial class MaterialsPage : ContentPage
         var subj = subject;
         tap.Tapped += (_, _) =>
         {
-            _ = Shell.Current.GoToAsync($"subjectfiles?subject={Uri.EscapeDataString(subj)}");
+            NavHelper.Go(this, new SubjectFilesPage(subj));
         };
         card.GestureRecognizers.Add(tap);
 
@@ -382,6 +383,6 @@ public partial class MaterialsPage : ContentPage
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("//home");
+        NavHelper.Back(this);
     }
 }

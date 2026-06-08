@@ -1,4 +1,5 @@
 using System.Text.Json;
+using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
@@ -348,7 +349,7 @@ public partial class YouTubeChannelsPage : ContentPage
         var g = group.Key;
         tap.Tapped += (_, _) =>
         {
-            _ = Shell.Current.GoToAsync($"youtubevideos?channel={Uri.EscapeDataString(g)}");
+            NavHelper.Go(this, new YouTubeChannelVideosPage(g));
         };
         card.GestureRecognizers.Add(tap);
 
@@ -403,7 +404,7 @@ public partial class YouTubeChannelsPage : ContentPage
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("//home");
+        NavHelper.Back(this);
     }
 
     private async void OnInfoTapped(object? sender, TappedEventArgs e)

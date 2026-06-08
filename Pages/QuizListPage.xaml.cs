@@ -100,11 +100,11 @@ public partial class QuizListPage : ContentPage
 
     private async Task OnSubjectTapped(QuizSubject subject)
     {
-        await Shell.Current.GoToAsync("//quizweb");
+        NavHelper.ReplaceAndGo(this, new QuizWebViewPage());
     }
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("//home");
+        NavHelper.Back(this);
     }
 }

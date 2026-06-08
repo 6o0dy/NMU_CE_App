@@ -21,6 +21,11 @@ public partial class AITitleBar : ContentView
     public AITitleBar()
     {
         InitializeComponent();
+
+        var dragPointer = new PointerGestureRecognizer();
+        dragPointer.PointerPressed += OnDragPointerPressed;
+        RootGrid.GestureRecognizers.Add(dragPointer);
+
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
         AttachHoverEffects();
@@ -29,7 +34,6 @@ public partial class AITitleBar : ContentView
     private void OnLoaded(object? sender, EventArgs e)
     {
         UpdateWindowControlsVisibility();
-        RefreshMaximizeIcon();
         TitleBarService.FullscreenChanged += OnPresenterChanged;
     }
 
@@ -40,21 +44,22 @@ public partial class AITitleBar : ContentView
 
     private void OnPresenterChanged()
     {
-        RefreshMaximizeIcon();
+        UpdateWindowControlsVisibility();
     }
 
     private void UpdateWindowControlsVisibility()
     {
 #if WINDOWS
-        BtnMinimize.IsVisible = true;
-        BtnMaximize.IsVisible = true;
-        BtnClose.IsVisible = true;
+        var fs = TitleBarService.IsFullscreen;
+        BtnMinimize.IsVisible = !fs;
+        BtnClose.IsVisible = !fs;
+        if (BtnFullscreen.Content is Label fullLabel)
+            fullLabel.Text = fs ? "\uE73F" : "\uE740";
 #endif
     }
 
     private void AttachHoverEffects()
     {
-        AttachHover(BtnDragHandle, "#15FFFFFF", "#25FFFFFF");
         AttachHover(BtnFullscreen, "#15FFFFFF", "#25FFFFFF");
         AttachHover(BtnBack, "#15AIPrimary", "#25AIPrimary");
         AttachHover(BtnMinimize, "#15FFFFFF", "#25FFFFFF");
@@ -74,16 +79,17 @@ public partial class AITitleBar : ContentView
 
 #if WINDOWS
     [DllImport("user32.dll")]
-    private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+    private static extern bool ReleaseCapture();
 
     [DllImport("user32.dll")]
-    private static extern bool ReleaseCapture();
+    private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
     private const uint WM_NCLBUTTONDOWN = 0xA1;
     private const int HTCAPTION = 2;
-    private const int HTMINBUTTON = 8;
-    private const int HTMAXBUTTON = 9;
-    private const int HTCLOSE = 20;
+    private const int SW_MINIMIZE = 6;
 
     private static IntPtr GetNativeHandle()
     {
@@ -92,19 +98,39 @@ public partial class AITitleBar : ContentView
             return WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
         return IntPtr.Zero;
     }
-
-    private static Microsoft.UI.Windowing.AppWindow? GetAppWindow()
-    {
-        var h = GetNativeHandle();
-        if (h == IntPtr.Zero) return null;
-        var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(h);
-        return Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
-    }
 #endif
 
-    private void OnDragTapped(object? sender, TappedEventArgs e)
+    private static bool IsOverButton(Point pos, View? btn, View root)
+    {
+        if (btn == null || !btn.IsVisible) return false;
+        double x = btn.X, y = btn.Y;
+        var p = btn.Parent;
+        while (p != null && p != root)
+        {
+            if (p is View v) { x += v.X; y += v.Y; }
+            p = p.Parent;
+        }
+        return pos.X >= x && pos.X <= x + btn.Width &&
+               pos.Y >= y && pos.Y <= y + btn.Height;
+    }
+
+    private bool IsOverAnyButton(Point pos)
+    {
+        return IsOverButton(pos, BtnBack, RootGrid) ||
+               IsOverButton(pos, BtnFullscreen, RootGrid) ||
+               IsOverButton(pos, BtnMinimize, RootGrid) ||
+               IsOverButton(pos, BtnClose, RootGrid);
+    }
+
+    private void OnDragPointerPressed(object? sender, PointerEventArgs e)
     {
 #if WINDOWS
+        if (TitleBarService.IsFullscreen) return;
+        var p = e.GetPosition(RootGrid);
+        if (p == null) return;
+        if (IsOverAnyButton(p.Value))
+            return;
+
         var h = GetNativeHandle();
         if (h != IntPtr.Zero)
         {
@@ -117,49 +143,13 @@ public partial class AITitleBar : ContentView
     private void OnMinimizeTapped(object? sender, TappedEventArgs e)
     {
 #if WINDOWS
-        try
-        {
-            if (GetAppWindow()?.Presenter is Microsoft.UI.Windowing.OverlappedPresenter op)
-                op.Minimize();
-        }
-        catch { }
+        var h = GetNativeHandle();
+        if (h != IntPtr.Zero)
+            ShowWindow(h, SW_MINIMIZE);
 #endif
     }
 
-    private void OnMaximizeTapped(object? sender, TappedEventArgs e)
-    {
-#if WINDOWS
-        try
-        {
-            if (GetAppWindow()?.Presenter is Microsoft.UI.Windowing.OverlappedPresenter op)
-            {
-                var isMax = op.State == Microsoft.UI.Windowing.OverlappedPresenterState.Maximized;
-                if (isMax)
-                    op.Restore();
-                else
-                    op.Maximize();
-                RefreshMaximizeIcon();
-            }
-        }
-        catch { }
-#endif
-    }
-
-    public void RefreshMaximizeIcon()
-    {
-#if WINDOWS
-        try
-        {
-            if (GetAppWindow()?.Presenter is Microsoft.UI.Windowing.OverlappedPresenter op)
-            {
-                var isMax = op.State == Microsoft.UI.Windowing.OverlappedPresenterState.Maximized;
-                MaxMaxIcon.IsVisible = !isMax;
-                MaxRestoreIcon.IsVisible = isMax;
-            }
-        }
-        catch { }
-#endif
-    }
+    private void OnMaximizeTapped(object? sender, TappedEventArgs e) { }
 
     private void OnCloseTapped(object? sender, TappedEventArgs e)
     {

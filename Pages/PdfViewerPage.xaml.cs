@@ -4,38 +4,20 @@ using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
-[QueryProperty(nameof(FileUrl), "url")]
-[QueryProperty(nameof(FileName), "name")]
 public partial class PdfViewerPage : ContentPage
 {
     private string _fileUrl = "";
     private string _fileName = "";
     private bool _isDownloading;
 
-    public string FileUrl
-    {
-        get => _fileUrl;
-        set
-        {
-            _fileUrl = Uri.UnescapeDataString(value ?? "");
-            if (!string.IsNullOrEmpty(_fileUrl))
-                LoadPdf();
-        }
-    }
-
-    public string FileName
-    {
-        get => _fileName;
-        set
-        {
-            _fileName = Uri.UnescapeDataString(value ?? "");
-            PageTitle.Text = _fileName;
-        }
-    }
-
-    public PdfViewerPage()
+    public PdfViewerPage(string url, string name)
     {
         InitializeComponent();
+        _fileUrl = Uri.UnescapeDataString(url ?? "");
+        _fileName = Uri.UnescapeDataString(name ?? "");
+        PageTitle.Text = _fileName;
+        if (!string.IsNullOrEmpty(_fileUrl))
+            LoadPdf();
     }
 
     protected override void OnSizeAllocated(double width, double height)
@@ -105,7 +87,7 @@ public partial class PdfViewerPage : ContentPage
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
         PdfViewer.Source = new UrlWebViewSource { Url = "about:blank" };
-        _ = Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 
     private async void OnDownloadTapped(object? sender, TappedEventArgs e)

@@ -1,10 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
-[QueryProperty(nameof(GroupName), "group")]
 public partial class RecordedLecturesFilesPage : ContentPage
 {
     private const string ArchiveId = "nmu.ce";
@@ -28,20 +28,18 @@ public partial class RecordedLecturesFilesPage : ContentPage
     private int _lastCols;
     private double _pageWidth;
 
-    public string GroupName
-    {
-        get => _groupName;
-        set
-        {
-            _groupName = Uri.UnescapeDataString(value ?? "");
-            PageTitle.Text = _groupName.Replace("_", " ");
-            _ = LoadFilesAsync();
-        }
-    }
-
-    public RecordedLecturesFilesPage()
+    public RecordedLecturesFilesPage(string group)
     {
         InitializeComponent();
+        _groupName = Uri.UnescapeDataString(group ?? "");
+        PageTitle.Text = _groupName.Replace("_", " ");
+        try
+        {
+            var cached = Preferences.Get("nmu_recorded_orders", "{}");
+            _orderCache = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(cached) ?? new();
+        }
+        catch { _orderCache = new(); }
+        _ = LoadFilesAsync();
         try
         {
             var cached = Preferences.Get("nmu_recorded_orders", "{}");
@@ -584,7 +582,7 @@ public partial class RecordedLecturesFilesPage : ContentPage
                     await DisplayAlertAsync("No Internet", "You need internet to stream media.", "OK");
                     return;
                 }
-                _ = Shell.Current.GoToAsync($"mediaplayer?url={Uri.EscapeDataString(fullUrl)}&name={Uri.EscapeDataString(file.Name)}&audio={file.IsAudio}&title={Uri.EscapeDataString(cleanName)}");
+                NavHelper.Go(this, new MediaPlayerPage(fullUrl, file.Name, file.IsAudio, cleanName));
             };
             return t;
         }
@@ -710,7 +708,7 @@ public partial class RecordedLecturesFilesPage : ContentPage
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 
     private async void OnInfoTapped(object? sender, TappedEventArgs e)

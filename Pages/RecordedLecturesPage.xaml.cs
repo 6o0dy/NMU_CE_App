@@ -1,4 +1,5 @@
 using System.Text.Json;
+using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
@@ -408,7 +409,7 @@ public partial class RecordedLecturesPage : ContentPage
         var g = group;
         tap.Tapped += (_, _) =>
         {
-            _ = Shell.Current.GoToAsync($"recordedfiles?group={Uri.EscapeDataString(g)}");
+            NavHelper.Go(this, new RecordedLecturesFilesPage(g));
         };
         card.GestureRecognizers.Add(tap);
 
@@ -417,7 +418,7 @@ public partial class RecordedLecturesPage : ContentPage
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("//home");
+        NavHelper.Back(this);
     }
 
     private async void OnInfoTapped(object? sender, TappedEventArgs e)

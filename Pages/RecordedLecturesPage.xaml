@@ -4,6 +4,7 @@
              xmlns:controls="clr-namespace:NMU_CE_App.Controls"
              x:Class="NMU_CE_App.Pages.RecordedLecturesPage"
              Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
              BackgroundColor="{StaticResource BgMain}">
 
     <Grid RowDefinitions="Auto, *">

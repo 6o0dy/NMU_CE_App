@@ -184,13 +184,13 @@ public partial class HomePage : ContentPage
         if (e.Parameter is string page)
         {
             if (page == "materials")
-                await Shell.Current.GoToAsync("//materials");
+                NavHelper.Go(this, new MaterialsPage());
             else if (page == "youtube")
-                await Shell.Current.GoToAsync("youtubechannels");
+                NavHelper.Go(this, new YouTubeChannelsPage());
             else if (page == "recorded")
-                await Shell.Current.GoToAsync("recordedlectures");
+                NavHelper.Go(this, new RecordedLecturesPage());
             else if (page == "tests")
-                await Shell.Current.GoToAsync("//quizweb");
+                NavHelper.Go(this, new QuizWebViewPage());
             else if (page == "laboratory")
                 await DisplayAlertAsync("Coming Soon", "Laboratory page will be available soon.", "OK");
         }
@@ -450,7 +450,8 @@ public partial class HomePage : ContentPage
             await HideManageModal();
             UserNameLabel.Text = "Future Engineer";
             await DisplayAlertAsync("Deleted", "Your data has been removed.", "OK");
-            await Shell.Current.GoToAsync("//splash");
+            if (Application.Current?.Windows.Count > 0)
+                Application.Current.Windows[0].Page = new SplashPage();
         }
     }
 }

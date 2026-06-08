@@ -1,3 +1,5 @@
+using NMU_CE_App.Services;
+
 namespace NMU_CE_App.Pages;
 
 public partial class DebugErrorPage : ContentPage
@@ -11,6 +13,6 @@ public partial class DebugErrorPage : ContentPage
 
     private async void OnGoBackClicked(object? sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 }

@@ -26,7 +26,7 @@ public partial class QuizWebViewPage : ContentPage
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("//home");
+        NavHelper.Back(this);
     }
 
     private async Task LoadHtml()
@@ -102,9 +102,7 @@ public partial class QuizWebViewPage : ContentPage
 
             System.Diagnostics.Debug.WriteLine($"[QuizWebViewPage] {ex}");
 
-            // Show debug error page (temporary — remove after testing)
-            if (Shell.Current != null)
-                await Shell.Current.Navigation.PushModalAsync(new DebugErrorPage(ex.Message, ex.StackTrace));
+            NavHelper.Go(this, new DebugErrorPage(ex.Message, ex.StackTrace));
         }
     }
 
@@ -196,8 +194,7 @@ public partial class QuizWebViewPage : ContentPage
             LoadingOverlay.IsVisible = false;
             System.Diagnostics.Debug.WriteLine($"[QuizWebViewPage] LoadAndInjectQuiz: {ex.Message}");
 
-            if (Shell.Current != null)
-                await Shell.Current.Navigation.PushModalAsync(new DebugErrorPage(ex.Message, ex.StackTrace));
+            NavHelper.Go(this, new DebugErrorPage(ex.Message, ex.StackTrace));
         }
     }
 }

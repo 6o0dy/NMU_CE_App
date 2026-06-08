@@ -1,12 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
+using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
-[QueryProperty(nameof(FileUrl), "url")]
-[QueryProperty(nameof(FileName), "name")]
-[QueryProperty(nameof(IsAudio), "audio")]
-[QueryProperty(nameof(Title), "title")]
 public partial class MediaPlayerPage : ContentPage
 {
     private string _fileUrl = "";
@@ -14,14 +11,14 @@ public partial class MediaPlayerPage : ContentPage
     private bool _isAudio;
     private string _title = "";
 
-    public string FileUrl { get => _fileUrl; set => _fileUrl = Uri.UnescapeDataString(value ?? ""); }
-    public string FileName { get => _fileName; set => _fileName = Uri.UnescapeDataString(value ?? ""); }
-    public string IsAudio { get => _isAudio.ToString().ToLower(); set => _isAudio = value?.ToLower() == "true"; }
-    public string Title { get => _title; set { _title = Uri.UnescapeDataString(value ?? ""); PageTitle.Text = _title; } }
-
-    public MediaPlayerPage()
+    public MediaPlayerPage(string url, string name, bool isAudio, string title)
     {
         InitializeComponent();
+        _fileUrl = Uri.UnescapeDataString(url ?? "");
+        _fileName = Uri.UnescapeDataString(name ?? "");
+        _isAudio = isAudio;
+        _title = Uri.UnescapeDataString(title ?? "");
+        PageTitle.Text = _title;
         PlayerWebView.Navigating += OnWebViewNavigating;
     }
 
@@ -464,7 +461,7 @@ input[type=range]{{width:55px;height:3px;accent-color:var(--cyan);background:tra
         catch { }
 
         PlayerWebView.Source = "about:blank";
-        await Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 
     private void OnTitleBarBack(object? sender, EventArgs e)

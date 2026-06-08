@@ -29,7 +29,11 @@ public static class FullscreenService
                 var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
 
                 if (appWindow.Presenter.Kind == Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen)
+                {
                     appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.Default);
+                    if (appWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter op)
+                        op.Restore();
+                }
                 else
                     appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen);
             }

@@ -1,10 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
-[QueryProperty(nameof(SubjectName), "subject")]
 public partial class SubjectFilesPage : ContentPage
 {
     private const string ArchiveId = "nmu.ce";
@@ -28,20 +28,12 @@ public partial class SubjectFilesPage : ContentPage
     private List<MaterialFile> _currentDisplayFiles = new();
     private double _pageWidth;
 
-    public string SubjectName
-    {
-        get => _subjectName;
-        set
-        {
-            _subjectName = Uri.UnescapeDataString(value ?? "");
-            PageTitle.Text = _subjectName.Replace("_", " ");
-            _ = LoadSubjectFilesAsync();
-        }
-    }
-
-    public SubjectFilesPage()
+    public SubjectFilesPage(string subject)
     {
         InitializeComponent();
+        _subjectName = Uri.UnescapeDataString(subject ?? "");
+        PageTitle.Text = _subjectName.Replace("_", " ");
+        _ = LoadSubjectFilesAsync();
         try
         {
             var cached = Preferences.Get("nmu_materials_orders", "{}");
@@ -502,7 +494,7 @@ public partial class SubjectFilesPage : ContentPage
                     "OK");
                 return;
             }
-            _ = Shell.Current.GoToAsync($"viewer?url={Uri.EscapeDataString(fullUrl)}&name={Uri.EscapeDataString(file.Name)}");
+            NavHelper.Go(this, new PdfViewerPage(fullUrl, file.Name));
         };
         card.GestureRecognizers.Add(tap);
 
@@ -583,7 +575,7 @@ public partial class SubjectFilesPage : ContentPage
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 
     private void OnSearchTextChanged(object? sender, TextChangedEventArgs e)

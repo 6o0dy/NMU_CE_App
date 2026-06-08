@@ -79,13 +79,14 @@ public partial class SplashPage : ContentPage
             DialogCard.Scale = 1;
 
             await Task.Delay(400);
-            await GoToHome();
+            GoToHome();
         }
     }
 
-    private async Task GoToHome()
+    private void GoToHome()
     {
-        await Shell.Current.GoToAsync("//home");
+        if (Application.Current?.Windows.Count > 0)
+            Application.Current.Windows[0].Page = new HomePage();
     }
 
     private void OnTerm1Tapped(object? sender, TappedEventArgs e)
@@ -159,6 +160,6 @@ public partial class SplashPage : ContentPage
         SaveBtn.IsEnabled = false;
 
         await Task.Delay(200);
-        await GoToHome();
+        GoToHome();
     }
 }

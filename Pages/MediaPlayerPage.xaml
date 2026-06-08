@@ -4,6 +4,7 @@
              xmlns:controls="clr-namespace:NMU_CE_App.Controls"
              x:Class="NMU_CE_App.Pages.MediaPlayerPage"
              Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
              BackgroundColor="#000000">
 
     <Grid RowDefinitions="Auto, *">

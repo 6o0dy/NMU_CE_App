@@ -1,18 +1,18 @@
+using NMU_CE_App.Services;
+
 namespace NMU_CE_App.Pages;
 
-[QueryProperty(nameof(VideoUrl), "url")]
-[QueryProperty(nameof(Title), "title")]
 public partial class YouTubePlayerPage : ContentPage
 {
     private string _videoUrl = "";
     private string _title = "";
 
-    public string VideoUrl { get => _videoUrl; set => _videoUrl = Uri.UnescapeDataString(value ?? ""); }
-    public string Title { get => _title; set { _title = Uri.UnescapeDataString(value ?? ""); PageTitle.Text = _title; } }
-
-    public YouTubePlayerPage()
+    public YouTubePlayerPage(string url, string title)
     {
         InitializeComponent();
+        _videoUrl = Uri.UnescapeDataString(url ?? "");
+        _title = Uri.UnescapeDataString(title ?? "");
+        PageTitle.Text = _title;
         PlayerWebView.Navigating += OnWebViewNavigating;
     }
 
@@ -78,11 +78,11 @@ public partial class YouTubePlayerPage : ContentPage
     private async Task HandleBack()
     {
         PlayerWebView.Source = "about:blank";
-        await Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 }

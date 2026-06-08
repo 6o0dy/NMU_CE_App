@@ -1,8 +1,8 @@
 using System.Text.Json;
+using NMU_CE_App.Services;
 
 namespace NMU_CE_App.Pages;
 
-[QueryProperty(nameof(ChannelKey), "channel")]
 public partial class YouTubeChannelVideosPage : ContentPage
 {
     private const string FirebaseDbUrl = "https://nmu-ce-default-rtdb.firebaseio.com";
@@ -17,19 +17,11 @@ public partial class YouTubeChannelVideosPage : ContentPage
     private int _lastCols;
     private double _pageWidth;
 
-    public string ChannelKey
-    {
-        get => _channelKey;
-        set
-        {
-            _channelKey = Uri.UnescapeDataString(value ?? "");
-            _ = LoadChannelVideos();
-        }
-    }
-
-    public YouTubeChannelVideosPage()
+    public YouTubeChannelVideosPage(string channel)
     {
         InitializeComponent();
+        _channelKey = Uri.UnescapeDataString(channel ?? "");
+        _ = LoadChannelVideos();
     }
 
     private async Task LoadChannelVideos()
@@ -324,7 +316,7 @@ public partial class YouTubeChannelVideosPage : ContentPage
                 await DisplayAlertAsync("No Internet", "You need internet to play videos.", "OK");
                 return;
             }
-            _ = Shell.Current.GoToAsync($"youtubeplayer?url={Uri.EscapeDataString(vUrl)}&title={Uri.EscapeDataString(vTitle)}");
+            NavHelper.Go(this, new YouTubePlayerPage(vUrl, vTitle));
         };
         card.GestureRecognizers.Add(tap);
 
@@ -408,7 +400,7 @@ public partial class YouTubeChannelVideosPage : ContentPage
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        _ = Shell.Current.GoToAsync("..");
+        NavHelper.Back(this);
     }
 
     private async void OnInfoTapped(object? sender, TappedEventArgs e)

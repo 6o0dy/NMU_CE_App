@@ -16,7 +16,8 @@
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="0" />
         </Border.StrokeShape>
-        <Grid ColumnDefinitions="Auto, *, Auto"
+        <Grid x:Name="RootGrid"
+              ColumnDefinitions="Auto, *, Auto"
               HeightRequest="36"
               Padding="0,0,0,0">
             <!-- Left: back + app name -->
@@ -87,27 +88,11 @@
                 </Label.Shadow>
             </Label>
 
-            <!-- Right: + drag, Fullscreen, Min, Max, Close -->
+            <!-- Right: Fullscreen, Min, Close -->
             <HorizontalStackLayout Grid.Column="2"
                                    Spacing="0"
                                    VerticalOptions="Center"
                                    Margin="0,0,0,0">
-                <Border x:Name="BtnDragHandle"
-                        WidthRequest="36" HeightRequest="36"
-                        BackgroundColor="Transparent"
-                        StrokeThickness="0"
-                        Padding="0">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnDragTapped" />
-                    </Border.GestureRecognizers>
-                    <Label Text="&#xE8FB;"
-                           FontFamily="Segoe MDL2 Assets"
-                           FontSize="12"
-                           TextColor="{StaticResource TextMuted}"
-                           HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center"
-                           Opacity="0.7" />
-                </Border>
                 <Border x:Name="BtnFullscreen"
                         WidthRequest="46" HeightRequest="36"
                         BackgroundColor="Transparent"
