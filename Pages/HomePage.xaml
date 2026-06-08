@@ -420,10 +420,11 @@
               BackgroundColor="{StaticResource ModalOverlay}">
             <Border BackgroundColor="{StaticResource BgCard}"
                     Stroke="{StaticResource AIPrimary}"
-                    StrokeThickness="1"
+                    StrokeThickness="3"
                     StrokeShape="RoundRectangle 25"
-                    Padding="28"
-                    MaximumWidthRequest="420"
+                    MaximumWidthRequest="450"
+                    WidthRequest="{OnIdiom Phone='340', Tablet='420', Desktop='450'}"
+                    Padding="{OnIdiom Phone='24,32', Desktop='32,40'}"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     Margin="20,0">
@@ -449,14 +450,14 @@
 
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Your Name" TextColor="{StaticResource AICyan}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
-                        <Border BackgroundColor="{StaticResource InputBg}" Stroke="#334155" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="12,0">
+                        <Border BackgroundColor="{StaticResource InputBg}" Stroke="#334155" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="0">
                             <Entry x:Name="EditName" IsEnabled="False" TextColor="White" FontFamily="Cairo" FontSize="14" BackgroundColor="Transparent" />
                         </Border>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Academic Level" TextColor="{StaticResource AICyan}" FontSize="13" FontAttributes="Bold" FontFamily="Cairo" />
-                        <Border BackgroundColor="{StaticResource InputBg}" Stroke="#334155" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="12,0">
+                        <Border BackgroundColor="{StaticResource InputBg}" Stroke="#334155" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="0">
                             <Picker x:Name="EditYear" IsEnabled="False" TextColor="White" FontFamily="Cairo" FontSize="14" BackgroundColor="Transparent">
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
@@ -489,7 +490,7 @@
                         </Grid>
                     </VerticalStackLayout>
 
-                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10" Margin="0,8,0,0">
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10" Margin="20,8,20,0">
                         <Border x:Name="EditSaveBtn" BackgroundColor="{StaticResource AIPrimary}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="0" HeightRequest="44">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnEditSaveTapped" />

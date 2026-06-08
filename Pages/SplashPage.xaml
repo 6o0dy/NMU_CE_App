@@ -75,7 +75,7 @@
 
                             <VerticalStackLayout Spacing="8" HorizontalOptions="Fill">
                                 <Label Text="Full Name" TextColor="#D1D5DB" FontSize="13" FontFamily="Cairo" />
-                                <Border BackgroundColor="#1F2937" Stroke="#374151" StrokeThickness="1" StrokeShape="RoundRectangle 10" MinimumHeightRequest="50" Padding="12,0" HorizontalOptions="Fill">
+                                <Border BackgroundColor="#1F2937" Stroke="#374151" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="0" HorizontalOptions="Fill">
                                     <Entry x:Name="NameEntry" 
                                            Placeholder="e.g. Abdelrahman Elsayed" 
                                            PlaceholderColor="#6B7280" 
@@ -89,17 +89,9 @@
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Spacing="8" HorizontalOptions="Fill">
-                                <Label Text="Academic Level" TextColor="#D1D5DB" FontSize="13" FontFamily="Cairo" />
-                                <Border BackgroundColor="#1F2937" Stroke="#374151" StrokeThickness="1" StrokeShape="RoundRectangle 10" MinimumHeightRequest="50" Padding="12,0" HorizontalOptions="Fill">
-                                    <Picker x:Name="YearPicker" 
-                                            Title="Select Level" 
-                                            TitleColor="#6B7280" 
-                                            TextColor="#FFFFFF" 
-                                            FontSize="15" 
-                                            FontFamily="Cairo" 
-                                            BackgroundColor="Transparent"
-                                            VerticalOptions="Center"
-                                            HorizontalOptions="Fill">
+                                <Label Text="Select Academic Level" TextColor="#D1D5DB" FontSize="13" FontFamily="Cairo" />
+                                <Border BackgroundColor="#1F2937" Stroke="#374151" StrokeThickness="1" StrokeShape="RoundRectangle 10" MinimumHeightRequest="50" Padding="0" HorizontalOptions="Fill">
+                                    <Picker x:Name="YearPicker">
                                         <Picker.ItemsSource>
                                             <x:Array Type="{x:Type x:String}">
                                                 <x:String>Level 1</x:String>

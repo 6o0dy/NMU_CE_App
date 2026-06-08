@@ -19,13 +19,33 @@ public partial class SplashPage : ContentPage
         try
         {
             FooterLabel.Text = SessionService.GetFooterCredit();
-            YearPicker.SelectedIndex = 0;
+            ResetForm();
             await HandleStartupFlow();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"[SplashPage] CRASH: {ex}");
         }
+    }
+
+    private void ResetForm()
+    {
+        NameEntry.Text = string.Empty;
+
+        YearPicker.SelectedIndex = 0;
+
+        _selectedTerm = null;
+
+        Term1Btn.Stroke = Color.FromArgb("#374151");
+        Term1Btn.BackgroundColor = Color.FromArgb("#1F2937");
+        Term1Label.TextColor = Color.FromArgb("#9CA3AF");
+
+        Term2Btn.Stroke = Color.FromArgb("#374151");
+        Term2Btn.BackgroundColor = Color.FromArgb("#1F2937");
+        Term2Label.TextColor = Color.FromArgb("#9CA3AF");
+
+        SaveLabel.Text = "Save Data";
+        SaveBtn.IsEnabled = true;
     }
 
     protected override void OnSizeAllocated(double width, double height)
@@ -40,6 +60,9 @@ public partial class SplashPage : ContentPage
         {
             SetupForm.IsVisible = true;
             LoadingSection.IsVisible = false;
+
+            DialogCard.Opacity = 0;
+            DialogCard.Scale = 0.95;
 
             await Task.WhenAll(
                 DialogCard.FadeTo(1, 450, Easing.CubicOut),

@@ -16,13 +16,13 @@ public partial class HomePage : ContentPage
     public HomePage()
     {
         InitializeComponent();
-        LoadUserData();
         AttachHoverEffects();
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        LoadUserData();
         if (!_hasAnimated)
             AnimateEntry();
         StartPulse();
@@ -172,6 +172,10 @@ public partial class HomePage : ContentPage
                 SelectEditTerm1();
             else
                 SelectEditTerm2();
+        }
+        else
+        {
+            UserNameLabel.Text = "Future Engineer";
         }
     }
 
@@ -443,6 +447,8 @@ public partial class HomePage : ContentPage
         if (confirm)
         {
             Preferences.Remove("nmu_student_v4");
+            await HideManageModal();
+            UserNameLabel.Text = "Future Engineer";
             await DisplayAlertAsync("Deleted", "Your data has been removed.", "OK");
             await Shell.Current.GoToAsync("//splash");
         }
