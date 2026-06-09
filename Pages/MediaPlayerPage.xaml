@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="NMU_CE_App.Pages.MediaPlayerPage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
@@ -16,10 +17,16 @@
 
         <Label x:Name="PageTitle" Text="Media Player" IsVisible="False" />
 
-        <WebView x:Name="PlayerWebView"
-                 Grid.Row="1"
-                 BackgroundColor="#000000"
-                 HorizontalOptions="Fill"
-                 VerticalOptions="Fill" />
+        <toolkit:MediaElement x:Name="Player"
+                            Grid.Row="1"
+                            BackgroundColor="#000000"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Fill"
+                            ShouldAutoPlay="True"
+                            ShouldShowPlaybackControls="True"
+                            MediaOpened="OnMediaOpened"
+                            MediaFailed="OnMediaFailed"
+                            PositionChanged="OnPositionChanged"
+                            StateChanged="OnStateChanged" />
     </Grid>
 </ContentPage>

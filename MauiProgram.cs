@@ -3,6 +3,7 @@ using NMU_CE_App.Services;
 using NMU_CE_App.Converters;
 using Microsoft.Maui.Handlers;
 using Syncfusion.Maui.Core.Hosting;
+using CommunityToolkit.Maui;
 
 namespace NMU_CE_App;
 
@@ -37,6 +38,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .ConfigureSyncfusionCore()
+            .UseMauiCommunityToolkitMediaElement(isAndroidForegroundServiceEnabled: false)
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Cairo.ttf", "Cairo");
