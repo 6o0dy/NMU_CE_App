@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             x:Class="NMU_CE_App.Pages.ExperimentsPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource BgMain}">
+
+    <Grid>
+        <GraphicsView x:Name="GridCanvas"
+                      InputTransparent="True">
+            <GraphicsView.Drawable>
+                <controls:GridBackgroundDrawable />
+            </GraphicsView.Drawable>
+        </GraphicsView>
+
+        <!-- Normal View: TitleBar + Search + Grid -->
+        <Grid x:Name="NormalView"
+              RowDefinitions="Auto, *">
+            <controls:AITitleBar x:Name="PageTitleBar"
+                                 Grid.Row="0"
+                                 Title="Laboratory"
+                                 ShowBack="True"
+                                 BackClicked="OnTitleBarBack" />
+
+            <ScrollView x:Name="ContentScroll"
+                        Grid.Row="1"
+                        Padding="20,10">
+                <Grid HorizontalOptions="Center">
+                    <VerticalStackLayout x:Name="ContentRoot"
+                                         MaximumWidthRequest="1280"
+                                         Spacing="12">
+
+                        <!-- Search -->
+                        <Border BackgroundColor="{StaticResource InputBg}"
+                                Stroke="#334155"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="0"
+                                HeightRequest="40">
+                            <Entry x:Name="SearchEntry"
+                                   Placeholder="Search experiments..."
+                                   PlaceholderColor="{StaticResource TextSecondary}"
+                                   TextColor="White"
+                                   FontFamily="Cairo"
+                                   FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   HorizontalTextAlignment="Center"
+                                   TextChanged="OnSearchTextChanged" />
+                        </Border>
+
+                        <!-- New Empty Lab Button -->
+                        <Border x:Name="NewLabBtn"
+                                BackgroundColor="#1A1E293B"
+                                Stroke="{StaticResource AICyan}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="12,10"
+                                HorizontalOptions="Center">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnNewLabTapped" />
+                            </Border.GestureRecognizers>
+                            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                                <Label Text="+"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource AICyan}"
+                                       VerticalTextAlignment="Center" />
+                                <Label Text="New Empty Lab"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource AICyan}"
+                                       FontFamily="Cairo"
+                                       VerticalTextAlignment="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <BoxView HeightRequest="4" Color="Transparent" />
+
+                        <!-- Experiments Grid -->
+                        <FlexLayout x:Name="ExperimentsGrid"
+                                    Wrap="Wrap"
+                                    JustifyContent="Center"
+                                    AlignItems="Start"
+                                    AlignContent="Start" />
+
+                        <BoxView HeightRequest="40" Color="Transparent" />
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
+        </Grid>
+
+        <!-- Viewer (full screen, covers everything) -->
+        <Grid x:Name="ViewerContainer"
+              IsVisible="False"
+              BackgroundColor="#0A0A1A">
+            <Grid RowDefinitions="Auto, *">
+                <!-- Viewer Header -->
+                <Border Grid.Row="0"
+                        BackgroundColor="#1A0A0A1A"
+                        Stroke="#287C3AED"
+                        StrokeThickness="0"
+                        HeightRequest="40">
+                    <Grid ColumnDefinitions="Auto, *, Auto"
+                          Padding="8,0">
+                        <Border Grid.Column="0"
+                                BackgroundColor="#1AFFFFFF"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 6"
+                                WidthRequest="32" HeightRequest="28">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnViewerBackTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="&#xE72B;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="12"
+                                   TextColor="{StaticResource AICyan}"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <Label Grid.Column="1"
+                               Text="Experiment Viewer"
+                               TextColor="{StaticResource AICyan}"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               FontFamily="Cairo"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
+
+                        <Border Grid.Column="2"
+                                BackgroundColor="#1AFFFFFF"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 6"
+                                WidthRequest="32" HeightRequest="28">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnViewerBackTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="&#xE8BB;"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="12"
+                                   TextColor="{StaticResource AICyan}"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <WebView x:Name="ExperimentWebView"
+                         Grid.Row="1"
+                         BackgroundColor="White"
+                         HorizontalOptions="Fill"
+                         VerticalOptions="Fill" />
+            </Grid>
+        </Grid>
+
+        <!-- Warning Overlay -->
+        <Grid x:Name="WarningOverlay"
+              IsVisible="False"
+              BackgroundColor="#FA0A0A1A">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnWarningOverlayTapped" />
+            </Grid.GestureRecognizers>
+
+            <Border BackgroundColor="{StaticResource BgCard}"
+                    Stroke="{StaticResource AICyan}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 20"
+                    MaximumWidthRequest="400"
+                    Padding="30,20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="20">
+                <Border.Shadow>
+                    <Shadow Brush="#6600E5FF" Offset="0,0" Radius="24" Opacity="0.3" />
+                </Border.Shadow>
+                <VerticalStackLayout Spacing="16"
+                                     HorizontalOptions="Center">
+                    <Label Text="⚠️"
+                           FontSize="50"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="تنبيه هام"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           FontFamily="Cairo"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="يرجى العلم أن النتائج والقراءات التي تظهر في الدوائر التي تعتمد على مصدر تيار متردد (AC Sources) قد لا تكون دقيقة بنسبة 100%، وتُستخدم لأغراض توضيحية فقط."
+                           FontSize="14"
+                           TextColor="{StaticResource TextSecondary}"
+                           FontFamily="Cairo"
+                           HorizontalTextAlignment="Center"
+                           LineBreakMode="WordWrap" />
+                    <Border BackgroundColor="{StaticResource AICyan}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="20,10"
+                            HorizontalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnWarningDismissTapped" />
+                        </Border.GestureRecognizers>
+                        <Label Text="حسناً، فهمت"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#000000"
+                               FontFamily="Cairo"
+                               HorizontalTextAlignment="Center" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

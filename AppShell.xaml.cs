@@ -15,5 +15,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("youtubechannels", typeof(YouTubeChannelsPage));
         Routing.RegisterRoute("youtubevideos", typeof(YouTubeChannelVideosPage));
         Routing.RegisterRoute("youtubeplayer", typeof(YouTubePlayerPage));
+        Routing.RegisterRoute("experiments", typeof(ExperimentsPage));
+        Routing.RegisterRoute("feedback", typeof(FeedbackPage));
     }
 }

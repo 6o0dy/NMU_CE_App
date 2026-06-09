@@ -192,7 +192,7 @@ public partial class HomePage : ContentPage
             else if (page == "tests")
                 NavHelper.Go(this, new QuizWebViewPage());
             else if (page == "laboratory")
-                await DisplayAlertAsync("Coming Soon", "Laboratory page will be available soon.", "OK");
+                NavHelper.Go(this, new ExperimentsPage());
         }
     }
 
@@ -295,7 +295,7 @@ public partial class HomePage : ContentPage
     private async void OnEvalTapped(object? sender, TappedEventArgs e)
     {
         await CloseFab();
-        await DisplayAlertAsync("Coming Soon", "Evaluation page will be available soon.", "OK");
+        NavHelper.Go(this, new FeedbackPage());
     }
 
     private async void OnManageDataTapped(object? sender, TappedEventArgs e)

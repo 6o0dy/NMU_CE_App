@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             x:Class="NMU_CE_App.Pages.FeedbackPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource BgMain}">
+
+    <Grid>
+        <GraphicsView x:Name="GridCanvas"
+                      InputTransparent="True">
+            <GraphicsView.Drawable>
+                <controls:GridBackgroundDrawable />
+            </GraphicsView.Drawable>
+        </GraphicsView>
+
+        <Grid RowDefinitions="Auto, *">
+            <controls:AITitleBar x:Name="PageTitleBar"
+                                 Grid.Row="0"
+                                 Title="Feedback"
+                                 ShowBack="True"
+                                 BackClicked="OnTitleBarBack" />
+
+            <ScrollView x:Name="ContentScroll"
+                        Grid.Row="1"
+                        Padding="15,10">
+                <Grid HorizontalOptions="Center">
+                    <VerticalStackLayout x:Name="ContentRoot"
+                                         MaximumWidthRequest="600"
+                                         Spacing="16"
+                                         MinimumWidthRequest="280">
+
+                        <!-- ===== Feedback Widget Card ===== -->
+                        <Border x:Name="WidgetCard"
+                                BackgroundColor="{StaticResource BgCard}"
+                                Stroke="{StaticResource AICyan}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 24"
+                                Padding="20">
+                            <VerticalStackLayout x:Name="WidgetContent" Spacing="16">
+
+                                <!-- Widget Header -->
+                                <Grid x:Name="WidgetHeader" ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12">
+                                    <Border x:Name="LeftAvatar"
+                                            Grid.Column="0"
+                                            WidthRequest="50" HeightRequest="50"
+                                            StrokeShape="RoundRectangle 25"
+                                            Stroke="{StaticResource AIPrimary}"
+                                            StrokeThickness="2"
+                                            BackgroundColor="#0A0A1A">
+                                        <Label Text="👤" FontSize="24"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+                                    <VerticalStackLayout x:Name="HeaderTextArea"
+                                                         Grid.Column="1"
+                                                         VerticalOptions="Center"
+                                                         Spacing="2">
+                                        <Label x:Name="ProfileNameLabel"
+                                               Text="ABDELRHMAN ELSAYED"
+                                               FontSize="13" FontAttributes="Bold"
+                                               TextColor="{StaticResource AICyan}"
+                                               FontFamily="Fira Code"
+                                               HorizontalTextAlignment="Center" />
+                                        <Label x:Name="ProfileDescLabel"
+                                               Text="أخبرنا عن تجربتك واقتراحاتك"
+                                               FontSize="11"
+                                               TextColor="{StaticResource TextSecondary}"
+                                               FontFamily="Cairo"
+                                               HorizontalTextAlignment="Center" />
+                                    </VerticalStackLayout>
+                                    <Border x:Name="RightAvatar"
+                                            Grid.Column="2"
+                                            WidthRequest="50" HeightRequest="50"
+                                            StrokeShape="RoundRectangle 25"
+                                            Stroke="{StaticResource AIPrimary}"
+                                            StrokeThickness="2"
+                                            BackgroundColor="#0A0A1A">
+                                        <Label Text="👤" FontSize="24"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+                                </Grid>
+
+                                <!-- Stars + Anonymous Toggle -->
+                                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                                    <!-- Star rating will be built in code-behind -->
+                                    <Grid x:Name="StarsContainer" Grid.Column="0" />
+
+                                    <Border x:Name="AnonToggle"
+                                            Grid.Column="1"
+                                            BackgroundColor="#1A0A0A1A"
+                                            Stroke="{StaticResource BorderColor}"
+                                            StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 20"
+                                            Padding="12,6"
+                                            VerticalOptions="Center">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnAnonToggleTapped" />
+                                        </Border.GestureRecognizers>
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Border x:Name="AnonSwitch"
+                                                    WidthRequest="36" HeightRequest="20"
+                                                    BackgroundColor="#333333"
+                                                    StrokeThickness="0"
+                                                    StrokeShape="RoundRectangle 10"
+                                                    VerticalOptions="Center">
+                                                <Border x:Name="AnonKnob"
+                                                        WidthRequest="16" HeightRequest="16"
+                                                        BackgroundColor="White"
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 8"
+                                                        HorizontalOptions="End"
+                                                        Margin="2" />
+                                            </Border>
+                                            <Label x:Name="AnonLabel"
+                                                   Text="مجهول" FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   FontFamily="Cairo"
+                                                   VerticalTextAlignment="Center" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </Grid>
+
+                                <!-- Name Input -->
+                                <Border x:Name="NameInputBorder"
+                                        BackgroundColor="{StaticResource InputBg}"
+                                        Stroke="{StaticResource BorderColor}"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 12"
+                                        Padding="0">
+                                    <Entry x:Name="NameEntry"
+                                           Placeholder="ادخل اسمك هنا..."
+                                           PlaceholderColor="{StaticResource TextSecondary}"
+                                           TextColor="White" FontFamily="Cairo" FontSize="14"
+                                           BackgroundColor="Transparent"
+                                           HorizontalTextAlignment="Center" />
+                                </Border>
+
+                                <!-- Comment Input -->
+                                <Border x:Name="CommentInputBorder"
+                                        BackgroundColor="{StaticResource InputBg}"
+                                        Stroke="{StaticResource BorderColor}"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 12"
+                                        Padding="0">
+                                    <Editor x:Name="CommentEditor"
+                                            Placeholder="اكتب تقييمك أو مشكلتك هنا..."
+                                            PlaceholderColor="{StaticResource TextSecondary}"
+                                            TextColor="White" FontFamily="Cairo" FontSize="14"
+                                            BackgroundColor="Transparent"
+                                            HorizontalTextAlignment="Center"
+                                            HeightRequest="90" />
+                                </Border>
+
+                                <!-- Send + Delete Buttons -->
+                                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                                    <Border x:Name="DeleteBtn"
+                                            Grid.Column="0"
+                                            BackgroundColor="#1AFF4757"
+                                            Stroke="{StaticResource Danger}"
+                                            StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 12"
+                                            WidthRequest="50" HeightRequest="44"
+                                            IsVisible="False">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnDeleteTapped" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="🗑" FontSize="18"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <Border x:Name="SendBtn"
+                                            Grid.Column="1"
+                                            BackgroundColor="{StaticResource AIPrimary}"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 12"
+                                            HeightRequest="44">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSendTapped" />
+                                        </Border.GestureRecognizers>
+                                        <Label x:Name="SendBtnLabel"
+                                               Text="⏳ تهيئة..." FontSize="13"
+                                               FontAttributes="Bold" TextColor="#000000"
+                                               FontFamily="Cairo"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+                                </Grid>
+
+                                <!-- WhatsApp Link -->
+                                <Border x:Name="WhatsAppBtn"
+                                        BackgroundColor="#0F25D366"
+                                        Stroke="#3325D366"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 12"
+                                        Padding="12,10">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnWhatsAppTapped" />
+                                    </Border.GestureRecognizers>
+                                    <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                                        <Label Text="💬" FontSize="16" VerticalTextAlignment="Center" />
+                                        <Label Text="عندك مشكلة تقنية؟ تواصل معي على الواتساب"
+                                               FontSize="12" FontAttributes="Bold"
+                                               TextColor="#25D366" FontFamily="Cairo"
+                                               VerticalTextAlignment="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- ===== Reviews Header ===== -->
+                        <Grid ColumnDefinitions="*, Auto" Padding="4,8">
+                            <Label Grid.Column="0"
+                                   Text="آراء الطلاب" FontSize="16"
+                                   FontAttributes="Bold" TextColor="White" FontFamily="Cairo" />
+                            <Border x:Name="CountBadge"
+                                    Grid.Column="1"
+                                    BackgroundColor="#1A00E5FF"
+                                    Stroke="{StaticResource AICyan}" StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 20"
+                                    Padding="10,4">
+                                <Label x:Name="CountLabel"
+                                       Text="0 تقييم" FontSize="11"
+                                       FontAttributes="Bold" TextColor="{StaticResource AICyan}"
+                                       FontFamily="Fira Code"
+                                       HorizontalTextAlignment="Center" />
+                            </Border>
+                        </Grid>
+
+                        <!-- Loader -->
+                        <Label x:Name="LoaderLabel"
+                               Text="جاري تحميل التقييمات..." FontSize="13"
+                               TextColor="{StaticResource AICyan}" FontFamily="Fira Code"
+                               FontAttributes="Bold" HorizontalTextAlignment="Center"
+                               Margin="0,20" />
+
+                        <!-- Reviews List -->
+                        <VerticalStackLayout x:Name="ReviewsList" Spacing="12" />
+
+                        <BoxView HeightRequest="40" Color="Transparent" />
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
+        </Grid>
+
+        <!-- ===== Custom Alert Modal ===== -->
+        <Grid x:Name="AlertOverlay" IsVisible="False" BackgroundColor="#CC000000">
+            <Border BackgroundColor="{StaticResource BgCard}"
+                    Stroke="{StaticResource AICyan}" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 20"
+                    MaximumWidthRequest="320" Padding="24,20"
+                    HorizontalOptions="Center" VerticalOptions="Center" Margin="20">
+                <VerticalStackLayout Spacing="16" HorizontalOptions="Center">
+                    <Label x:Name="AlertIcon" Text="⭐" FontSize="36" HorizontalTextAlignment="Center" />
+                    <Label x:Name="AlertMessage" Text="" FontSize="14" FontAttributes="Bold"
+                           TextColor="White" FontFamily="Cairo"
+                           HorizontalTextAlignment="Center" LineBreakMode="WordWrap" />
+                    <Border x:Name="AlertDismissBtn"
+                            BackgroundColor="{StaticResource AICyan}" StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12" Padding="20,10" HorizontalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAlertDismissTapped" />
+                        </Border.GestureRecognizers>
+                        <Label Text="حسناً" FontSize="14" FontAttributes="Bold"
+                               TextColor="#000000" FontFamily="Cairo"
+                               HorizontalTextAlignment="Center" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- ===== Custom Confirm Modal ===== -->
+        <Grid x:Name="ConfirmOverlay" IsVisible="False" BackgroundColor="#CC000000">
+            <Border BackgroundColor="{StaticResource BgCard}"
+                    Stroke="{StaticResource Danger}" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 20"
+                    MaximumWidthRequest="320" Padding="24,20"
+                    HorizontalOptions="Center" VerticalOptions="Center" Margin="20">
+                <VerticalStackLayout Spacing="16" HorizontalOptions="Center">
+                    <Label Text="⚠️" FontSize="36" HorizontalTextAlignment="Center" />
+                    <Label Text="هل أنت متأكد أنك تريد حذف تقييمك نهائياً؟" FontSize="14"
+                           FontAttributes="Bold" TextColor="White" FontFamily="Cairo"
+                           HorizontalTextAlignment="Center" LineBreakMode="WordWrap" />
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <Border x:Name="ConfirmCancelBtn" Grid.Column="0"
+                                BackgroundColor="#334155" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 12" Padding="12,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnConfirmCancelTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="إلغاء" FontSize="14" FontAttributes="Bold"
+                                   TextColor="White" FontFamily="Cairo"
+                                   HorizontalTextAlignment="Center" />
+                        </Border>
+                        <Border x:Name="ConfirmDeleteBtn" Grid.Column="1"
+                                BackgroundColor="{StaticResource Danger}" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 12" Padding="12,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnConfirmDeleteTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="نعم، احذف" FontSize="14" FontAttributes="Bold"
+                                   TextColor="White" FontFamily="Cairo"
+                                   HorizontalTextAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
