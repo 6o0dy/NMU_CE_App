@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using NMU_CE_App.Services;
 using NMU_CE_App.Converters;
 using Microsoft.Maui.Handlers;
+using Syncfusion.Maui.Core.Hosting;
 
 namespace NMU_CE_App;
 
@@ -35,6 +36,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .ConfigureSyncfusionCore()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Cairo.ttf", "Cairo");
@@ -121,6 +123,8 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JHaF5cWWdCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdlWXleeXVXQmJcUUVxXEdWYEo=");
 
         return builder.Build();
     }

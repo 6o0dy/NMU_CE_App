@@ -16,6 +16,7 @@ public partial class PdfViewerPage : ContentPage
         _fileUrl = Uri.UnescapeDataString(url ?? "");
         _fileName = Uri.UnescapeDataString(name ?? "");
         PageTitle.Text = _fileName;
+
         if (!string.IsNullOrEmpty(_fileUrl))
             LoadPdf();
     }
@@ -46,16 +47,21 @@ public partial class PdfViewerPage : ContentPage
 
         if (File.Exists(cachedPath))
         {
-            var localUrl = new Uri(cachedPath).AbsoluteUri;
-            PdfViewer.Source = new UrlWebViewSource { Url = localUrl };
+            LoadFromCache(cachedPath);
             HideLoadingAfterDelay();
         }
         else
         {
-            PdfViewer.Source = new UrlWebViewSource { Url = _fileUrl };
+            SyncPdfViewer.DocumentSource = null;
             HideLoadingAfterDelay();
             _ = CachePdfAsync(cachedPath);
         }
+    }
+
+    private void LoadFromCache(string cachedPath)
+    {
+        var stream = File.OpenRead(cachedPath);
+        SyncPdfViewer.DocumentSource = stream;
     }
 
     private async Task CachePdfAsync(string cachedPath)
@@ -65,28 +71,32 @@ public partial class PdfViewerPage : ContentPage
             using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
             var data = await http.GetByteArrayAsync(_fileUrl);
             await File.WriteAllBytesAsync(cachedPath, data);
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                var stream = File.OpenRead(cachedPath);
+                SyncPdfViewer.DocumentSource = stream;
+            });
         }
         catch { }
     }
 
     private void HideLoadingAfterDelay()
     {
-        EventHandler<WebNavigatedEventArgs>? handler = null;
-        handler = (_, _) =>
+        _ = Task.Run(async () =>
         {
-            PdfViewer.Navigated -= handler;
+            await Task.Delay(1200);
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay(800);
+                await Task.Delay(500);
                 LoadingOverlay.IsVisible = false;
             });
-        };
-        PdfViewer.Navigated += handler;
+        });
     }
 
     private void OnTitleBarBack(object? sender, EventArgs e)
     {
-        PdfViewer.Source = new UrlWebViewSource { Url = "about:blank" };
+        SyncPdfViewer.DocumentSource = null;
         NavHelper.Back(this);
     }
 

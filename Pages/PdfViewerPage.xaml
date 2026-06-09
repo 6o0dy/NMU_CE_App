@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:NMU_CE_App.Controls"
+             xmlns:syncpdf="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
              x:Class="NMU_CE_App.Pages.PdfViewerPage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
@@ -23,7 +24,8 @@
                              BackClicked="OnTitleBarBack" />
 
         <Grid Grid.Row="1" RowDefinitions="*">
-            <WebView x:Name="PdfViewer" Grid.Row="0" />
+            <syncpdf:SfPdfViewer x:Name="SyncPdfViewer"
+                                 Grid.Row="0" />
 
             <Border x:Name="DownloadBtn"
                     BackgroundColor="{StaticResource BgCard}"
